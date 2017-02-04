@@ -150,4 +150,9 @@ class Admin_model extends CI_Model {
         $id = $this->input->post('id');
         $this->db->update('categories', $this,array('id'=> $id));
     }
+    
+    public function get_contacts() {
+        $query = $this->db->get('contact');
+        return $query->result_array();
+    }
 }

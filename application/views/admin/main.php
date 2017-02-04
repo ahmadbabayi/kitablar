@@ -13,8 +13,8 @@
         <li><?php echo anchor('admin/verifybook', 'Verify book') ?></li>
         <li><?php echo anchor('admin/userlist', 'User list') ?></li>
         <li><?php echo anchor('admin/categorylist', 'Categories') ?></li>
+        <li><?php echo anchor('admin/contacts', 'Contacts') ?></li>
         <li><?php echo anchor('admin/backup', 'Backup'); ?></li>
         <li><?php echo anchor('admin/restore', 'Restore'); ?></li>
     </ul>
 </div>
-

@@ -428,5 +428,25 @@ class Admin extends CI_Controller {
         $data['booklist'] = $this->admin_model->get_books2();
         $this->load->view('admin/booklisttest', $data);
     }
+    
+    public function contacts() {
+        $this->load->helper('date');
+        $data['description'] = '';
+        $data['keywords'] = '';
+        $data['title'] = 'admin area';
+        $data['booklist'] = $this->admin_model->get_contacts();
+        $this->load->view('header', $data);
+        $this->load->view('admin/main');
+        $this->load->view('admin/contacts', $data);
+        $this->load->view('footer');
+    }
+    
+    public function contactremove($id) {
+        $id = intval($id);
+        if ($id > 0) {
+            $this->db->query('delete from contact where id=' . $id);
+        }
+        redirect('admin/contacts/', 'location');
+    }
 
 }

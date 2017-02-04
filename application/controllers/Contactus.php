@@ -35,7 +35,10 @@ class Contactus extends CI_Controller {
         $this->form_validation->set_rules('message', 'Message', 'required');
         $this->form_validation->set_rules('email', 'Email', 'trim|valid_email');
 
-        $this->load->view('header');
+        $data['description'] = 'Contact us form';
+        $data['keywords'] = '';
+        $data['title'] = 'Contact us';
+        $this->load->view('header', $data);
         
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('contact/contactus');
