@@ -25,7 +25,7 @@
     </ul>
     <div class="w3-panel">
         <p>
-            <?php echo $row['description']; ?>
+            <?php echo nl2br($row['description']); ?>
         </p>
     </div> 
     <table class="w3-table w3-border">
