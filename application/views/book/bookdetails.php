@@ -16,7 +16,7 @@
     }
     ?>
     <h1><?php echo $row['title']; ?></h1>
-    <img style="max-width: 100%; height: auto;" src="<?php echo base_url($link); ?>" alt="<?php echo$row['title']; ?>" border="1">
+    <img class="w3-border" style="max-width: 100%; height: auto;" src="<?php echo base_url($link); ?>" alt="<?php echo$row['title']; ?>" border="1">
     <ul class="w3-ul w3-card-4">
         <li>Author: <?php echo $row['author']; ?></li>
         <li>Translated by: <?php echo $row['translator']; ?></li>

@@ -32,7 +32,7 @@ if (!empty($categorylist)) {
             $link2 = site_url() . 'book/details/' . $row['id'];
             echo $link2;
             ?>">
-                <img src="<?php echo base_url($link); ?>"><br>
+                <img class="w3-border" src="<?php echo base_url($link); ?>"><br>
                     <?php echo $row['title']; ?>
                 </a>
         <?php endforeach; ?>
