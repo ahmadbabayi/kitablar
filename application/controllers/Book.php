@@ -128,21 +128,6 @@ class Book extends CI_Controller {
             redirect('book', 'location');
         }
         $this->load->model('member_model');
-        if ($this->session->has_userdata('libraryid')) {
-            $data['addtolibrary'] = 1;
-            $data['libraryname'] = $this->member_model->show_library_name($this->session->userdata('libraryid'));
-            $bookids2 = $this->member_model->library_book_ids($this->session->userdata('libraryid'));
-            $bookids = $bookids2['book_ids'];
-            $ids = explode(' ', $bookids);
-            if (in_array($id, $ids)) {
-                $data['inmylibrary'] = 1;
-            } else {
-                $data['inmylibrary'] = 0;
-            }
-        } else {
-            $data['addtolibrary'] = 0;
-        }
-
         $this->load->helper('file');
         $this->load->helper('download');
         $this->load->helper('number');

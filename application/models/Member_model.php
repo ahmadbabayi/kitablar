@@ -27,6 +27,11 @@ class Member_model extends CI_Model {
         $query = $this->db->get('book_files');
         return $query->result_array();
     }
+    
+    public function show_file($id) {
+        $query = $this->db->get_where('book_files', array('id' => $id));
+        return $query->row_array();
+    }
 
     public function insert_book() {
         $this->language = $this->input->post('book_lang');

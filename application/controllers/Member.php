@@ -223,9 +223,12 @@ class Member extends CI_Controller {
 
     public function removefile($book_id, $id) {
         $data['row'] = $this->member_model->show_books($book_id);
+        $item = $this->member_model->show_file($id);
         if (!empty($data['row'])) {
             if ($id > 0) {
                 $this->db->query('delete from book_files where id=' . $id . ' and book_id=' . $book_id);
+                $filename = './data/books/bk' . $item['book_id'] . '/' . $item['file_name'];
+                unlink($filename);
             }
             redirect('member/bookdetails/' . $book_id, 'location');
         }

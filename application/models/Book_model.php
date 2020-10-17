@@ -63,7 +63,6 @@ class Book_model extends CI_Model {
     }
 
     public function show_file($id) {
-
         $query = $this->db->get_where('book_files', array('id' => $id));
         return $query->row_array();
     }
