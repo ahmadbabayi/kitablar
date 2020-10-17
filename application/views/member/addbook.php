@@ -1,11 +1,12 @@
+<div class="w3-container">
 <?php
 echo validation_errors();
 ?>
 <div class="memberbookadd">
-    <a href="javascript:history.go(-1)">Back</a>
+    <a class="w3-button" href="javascript:history.go(-1)">Back</a>
 </div>
 
-<?php echo form_open_multipart('member/addingbook'); ?>
+<?php echo form_open_multipart('member/addbook'); ?>
 <input type="hidden" name="type" value="1" />
 <table>
     <tr><td>Language</td><td>
@@ -42,3 +43,4 @@ echo validation_errors();
 <div><input type="submit" value="Submit" /></div>
 
 </form>
+</div>

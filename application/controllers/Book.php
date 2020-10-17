@@ -14,6 +14,7 @@ class Book extends CI_Controller {
         $config['per_page'] = $this->config->item('per_page');
         $config['next_link'] = 'Next';
         $config['prev_link'] = 'Previous';
+        $config['attributes'] = array('class' => 'w3-button');
         $this->pagination->initialize($config);
     }
 

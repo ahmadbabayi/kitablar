@@ -1,4 +1,5 @@
-    <?php
+<div class="w3-container">
+<?php
     echo validation_errors();
     echo form_open('member/profileupdate');
     ?>
@@ -20,3 +21,4 @@
     </table>
     <div><input type="submit" value="Submit" /></div>
 </form>
+</div>

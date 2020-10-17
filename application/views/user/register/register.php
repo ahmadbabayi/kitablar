@@ -1,4 +1,5 @@
-<div class="content">
+<div class="w3-container">
+    <div class="w3-center" style="width: 300px; margin: auto;">
     <?php
     echo validation_errors();
     echo form_open('user/registering');
@@ -30,4 +31,5 @@
         </tr>
     </table>
 </form>
+    </div>
 </div>

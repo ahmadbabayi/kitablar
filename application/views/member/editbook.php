@@ -1,12 +1,13 @@
+<div class="w3-container">
 <?php
 echo validation_errors();
 ?>
 <div class="memberbookadd">
     <ul>
-        <li><?php echo anchor('member/bookdetails/'. $row['id'], 'back'); ?></li>
+        <li><?php echo anchor('book/details/'. $row['id'], 'back'); ?></li>
     </ul>
 </div>
-<?php echo form_open_multipart('member/editingbook'); ?>
+<?php echo form_open_multipart('member/editbook'); ?>
 <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
 <input type="hidden" name="book_lang_code" value="<?php echo $row['language']; ?>" />
 <table class="memberedit">
@@ -41,3 +42,4 @@ echo validation_errors();
 <div><input type="submit" value="Submit" /></div>
 
 </form>
+</div>

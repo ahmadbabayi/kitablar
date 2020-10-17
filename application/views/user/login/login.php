@@ -1,28 +1,28 @@
-<div class="content">
+<div class="w3-container">
+    <div class="w3-center" style="width: 300px; margin: auto;">
+    <h1>Login</h1>
     <?php
     echo validation_errors();
-    echo form_open();
+    echo form_open('','class="w3-container w3-card-4"');
     if (!empty($errormatn))
     {
         echo $errormatn;
     }
     ?>
-    <h1>Login</h1>
-    <table>
-        <tr>
-            <td>Username:</td>
-            <td><input type="text" name="username" required="" placeholder="Your username"></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type="password" class="form-control" name="password" required="" placeholder="Your password"></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit" value="Login"></td>
-        </tr>
-    </table>
+
+<p><label>Name</label>
+    <input class="w3-input w3-border" name="username" type="text" style="width:90%" required="">
+</p>
+<p><label>Password</label>
+    <input class="w3-input w3-border" name="password" type="password" style="width:90%" required="">
+</p>
+
+<p>
+    <button class="w3-button w3-section w3-teal w3-ripple" type="submit"> Log in </button></p>
+
 </form>
-<div class="memberbookadd">
-    <?php echo anchor('user/register', 'Register'); ?>
-</div>
+    <p>
+        <a href="<?php echo base_url('user/register'); ?>" class="w3-btn w3-light-gray w3-border">Register new user</a>
+    </p>
+    </div>
 </div>

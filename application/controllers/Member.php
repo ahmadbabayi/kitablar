@@ -25,17 +25,6 @@ class Member extends CI_Controller {
     }
 
     public function addbook() {
-        $this->load->library('form_validation');
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'mamber area';
-        $this->load->view('header', $data);
-        $this->load->view('member/main');
-        $this->load->view('member/addbook');
-        $this->load->view('footer');
-    }
-
-    public function addingbook() {
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
@@ -66,6 +55,7 @@ class Member extends CI_Controller {
             //creat thumbnail of cover
             $this->load->helper('thumb_helper');
             $image1_path = $dir . 'cover.jpg';
+            branding($image1_path);
             $image2_path = $dir . 'coverthumb.jpg';
             create_thumb($image1_path, $image2_path, $box = 160);
 
@@ -117,46 +107,38 @@ class Member extends CI_Controller {
             }
             $data['selectedcategory'] = $checkedcat;
             $this->load->view('header', $data);
-            $this->load->view('member/main');
             $this->load->view('member/bookdetails', $data);
             $this->load->view('footer');
         }
     }
 
-    public function editbook($id) {
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'mamber area';
-        $this->load->library('form_validation');
-        $data['row'] = $this->member_model->show_books($id);
-        if (!empty($data['row'])) {
-            $this->load->view('header', $data);
-            $this->load->view('member/main');
-            $this->load->view('member/editbook', $data);
-            $this->load->view('footer');
+    public function editbook() {
+        if ($this->uri->segment(3, 0) == '') {
+            $id = intval($this->input->post('id'));
+        } else {
+            $id = $this->uri->segment(3, 0);
         }
- else {show_404();}
-    }
-
-    public function editingbook() {
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
-        $id = intval($this->input->post('id'));
         if ($id > 0) {
             $data['row'] = $this->member_model->show_books($id);
-            $this->load->helper(array('form', 'url'));
-            $this->load->library('form_validation');
+            if (!empty($data['row'])) {
+                $this->load->helper(array('form', 'url'));
+                $this->load->library('form_validation');
 
-            $this->form_validation->set_rules('title', 'Title', 'required');
+                $this->form_validation->set_rules('title', 'Title', 'required');
 
-            if ($this->form_validation->run() == FALSE) {
-                $this->load->view('header', $data);
-                $this->load->view('member/editbook', $data);
-                $this->load->view('footer');
+                if ($this->form_validation->run() == FALSE) {
+                    $this->load->view('header', $data);
+                    $this->load->view('member/editbook', $data);
+                    $this->load->view('footer');
+                } else {
+                    $this->member_model->update_book();
+                    redirect('member/bookdetails/' . $id, 'location');
+                }
             } else {
-                $this->member_model->update_book();
-                redirect('member/bookdetails/' . $id, 'location');
+                show_404();
             }
         }
     }
@@ -200,11 +182,10 @@ class Member extends CI_Controller {
     public function removebook($id) {
         $id = intval($id);
         if ($id > 0) {
-            if ($this->db->query('delete from books where id=' . $id . ' and user_id=' . $this->session->userdata('user_id')))
-            {
+            if ($this->db->query('delete from books where id=' . $id . ' and user_id=' . $this->session->userdata('user_id'))) {
                 $dir = './data/books/bk' . $id . '/';
                 $dir2 = './data/trash/bk' . $id . '/';
-                rename($dir, $dir2); 
+                rename($dir, $dir2);
             }
         }
         redirect('member/booklist/', 'location');
@@ -221,12 +202,14 @@ class Member extends CI_Controller {
 
         $config['upload_path'] = './data/books/bk' . $id . '/';
         $config['file_name'] = 'f' . $id;
+        $config['max_size'] = 7000;
         $config['allowed_types'] = 'jpg|zip|pdf|doc|docx|epub|txt|odt';
 
         $this->load->library('upload', $config);
 
         if (!$this->upload->do_upload('bookfile')) {
             $error = array('error' => $this->upload->display_errors());
+            $data['error'] = $error;
             $this->load->view('header', $data);
             $this->load->view('member/uploadfileerror', $error);
             $this->load->view('footer');

@@ -1,37 +1,39 @@
-<?php
-$link = 'data/books/bk' . $row['id'] . '/cover.jpg';
-if (!file_exists($link)) {
-    $link = '/data/kitab.gif';
-}
-?>
-<div class="content">
-    <h1><?php echo $row['title']; ?></h1>
-    <img src="<?php echo base_url($link); ?>" alt="<?php echo$row['title']; ?>" border="1">
-    <?php
-    if ($addtolibrary) {
-        echo '<div class=menimlibrary>Your selected library: '.$libraryname['title'];
-        if ($inmylibrary) {
-            echo '<div id="txthint"><button onclick="libraryremove(' . $row['id'] . ')">Remove from library</button></div>';
-        } else {
-            echo '<div id="txthint"><button onclick="libraryadd(' . $row['id'] . ')">Add to library</button></div>';
-        }
-        echo '</div>';
+<div class="w3-container w3-center">
+    <div class="w3-bar">
+        <?php
+        if (isset($_SESSION['username']) && $_SESSION['logged_in'] === true) {
+            echo anchor('member/addbook', 'Add new E-book', 'class="w3-bar-item w3-button w3-mobile"');
+            echo anchor('member/editbook/' . $row['id'], 'edit E-book details', 'class="w3-bar-item w3-button w3-mobile"');
+            echo anchor('member/bookdetails/' . $row['id'], 'book details and file uploads', 'class="w3-bar-item w3-button w3-mobile"');
+            ?>
+            <a href="<?php echo site_url() . '/member/removebook/' . $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this item?');" class="w3-bar-item w3-button w3-mobile">remove E-book</a>
+        </div>
+        <?php
+    }
+    $link = 'data/books/bk' . $row['id'] . '/cover.jpg';
+    if (!file_exists($link)) {
+        $link = '/data/kitab.gif';
     }
     ?>
-    <ul>
+    <h1><?php echo $row['title']; ?></h1>
+    <img style="max-width: 100%; height: auto;" src="<?php echo base_url($link); ?>" alt="<?php echo$row['title']; ?>" border="1">
+    <ul class="w3-ul w3-card-4">
         <li>Author: <?php echo $row['author']; ?></li>
         <li>Translated by: <?php echo $row['translator']; ?></li>
         <li>ISBN: <?php echo $row['isbn']; ?></li>
-        <li>Date: <?php echo standard_date('DATE_W3C', $row['date']); ?></li>
-        <li>Added by: <?php echo $row['username']; ?></li>
-        <li><?php echo $row['description']; ?></li>
+        <li>Viewed: <?php echo $row['hits']; ?></li>
     </ul>
-    <table class="bookfiles">
-        <tr>
-            <td>Format</td>
-            <td colspan="2">Size</td>
+    <div class="w3-panel">
+        <p>
+            <?php echo $row['description']; ?>
+        </p>
+    </div> 
+    <table class="w3-table w3-border">
+        <tr class="w3-green">
+            <th>Format</th>
+            <th colspan="2">Size</th>
         </tr>
-<?php foreach ($filerow as $item): ?>
+        <?php foreach ($filerow as $item): ?>
 
             <tr>
                 <td>
@@ -50,13 +52,9 @@ if (!file_exists($link)) {
                     echo byte_format($filesize);
                     ?>
                 </td>
-                <td><?php echo anchor('book/download/' . $item['id'], 'Download', 'class="downloadbutton"') ?></td>
+                <td><?php echo anchor('book/download/' . $item['id'], 'Download', 'class="w3-button w3-hover-green w3-red"') ?></td>
             </tr>
-<?php endforeach; ?>
+        <?php endforeach; ?>
 
     </table>
-    <div>
-        <h2>Download URL:</h2>
-        <input onfocus="this.select();" class="urlinput" type="text" value="http://www.kitablar.com/book/details/<?php echo $row['id'] ?>">
-    </div>
 </div>

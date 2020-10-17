@@ -5,7 +5,6 @@ class User extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('user_model');
-        $this->load->library('session');
     }
 
     public function index() {
@@ -64,6 +63,9 @@ class User extends CI_Controller {
         $str = $this->input->post('captcha');
         $word = $this->session->userdata('captchaword');
 
+        $data['description'] = 'user registration form';
+        $data['keywords'] = '';
+        $data['title'] = 'user registration';
 
         $this->form_validation->set_rules('username', 'Username', 'trim|required|alpha_numeric|min_length[4]|is_unique[users.username]', array('is_unique' => 'This username already exists. Please choose another one.'));
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|is_unique[users.email]');
@@ -160,7 +162,7 @@ class User extends CI_Controller {
                 $_SESSION['is_confirmed'] = (bool) $user->is_confirmed;
                 $_SESSION['is_admin'] = (bool) $user->is_admin;
 
-                // user login ok
+                //echo 'user login ok';
                 redirect('member/', 'location');
             } else {
 

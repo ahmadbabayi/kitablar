@@ -1,0 +1,19 @@
+@font-face {
+  font-family: 'XBNiloofar';
+  src: url('../data/fonts/XBNiloofar.eot');
+  src: url('../data/fonts/XBNiloofar.eot?#iefix') format('embedded-opentype'),
+       url('../data/fonts/XBNiloofar.svg#XBNiloofar') format('svg'),
+       url('../data/fonts/XBNiloofar.ttf') format('truetype'),
+       url('../data/fonts/XBNiloofar.woff') format('woff'),
+       url('../data/fonts/XBNiloofar.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.pagination a
+{
+    margin: 3px;
+}
+#loadergif{
+    display: none;
+}

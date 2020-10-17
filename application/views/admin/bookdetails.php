@@ -1,3 +1,4 @@
+<div class="w3-container">
 <div class="memberbookadd">
     <ul>
         <li><?php echo anchor('admin/booklist/', 'back'); ?></li>
@@ -98,4 +99,5 @@
 <?php endforeach; ?>
 
     </table>
+</div>
 </div>

@@ -6,12 +6,15 @@ class Rss extends CI_Controller {
         parent::__construct();
         $this->load->model('main_model');
         $this->load->helper('date');
+        $this->load->helper('file');
     }
 
     public function index() {
         $data['booklist'] = $this->main_model->get_last_entries();
-        header("Content-Type: application/rss+xml; charset=UTF-8");
-        $this->load->view('rss/rss', $data);
+        $string = $this->load->view('rss/rss', $data, TRUE);
+        $this->output
+        ->set_content_type('application/rss+xml')
+        ->set_output($string);
     }
-    
+
 }
