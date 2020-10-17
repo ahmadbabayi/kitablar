@@ -1,7 +1,7 @@
 <div class="w3-container">
 <?php
     echo validation_errors();
-    echo form_open('member/profileupdate');
+    echo form_open('member/profile');
     ?>
     <h1>Profile</h1>
     <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />

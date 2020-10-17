@@ -235,19 +235,6 @@ class Member extends CI_Controller {
     }
 
     public function profile() {
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'mamber area';
-        $this->load->library('form_validation');
-
-        $data['row'] = $this->member_model->show_profile($this->session->userdata('user_id'));
-        $this->load->view('header', $data);
-        $this->load->view('member/main');
-        $this->load->view('member/profile', $data);
-        $this->load->view('footer');
-    }
-
-    public function profileupdate() {
         $this->load->library('form_validation');
         $id = $this->input->post('id');
         $data['row'] = $this->member_model->show_profile($this->session->userdata('user_id'));
