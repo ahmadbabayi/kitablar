@@ -197,6 +197,8 @@ class Book extends CI_Controller {
             redirect('book/details/' . $item['book_id'], 'location');
         }
         $this->load->helper('download');
+        
+        $this->book_model->update_download_hit($id,$item['download']);
 
         $filename = './data/books/bk' . $item['book_id'] . '/' . $item['file_name'];
         force_download($filename, NULL);

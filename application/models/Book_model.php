@@ -97,6 +97,11 @@ class Book_model extends CI_Model {
         $this->db->update('books', $this, array('id' => $id));
     }
     
+    public function update_download_hit($id,$num) {
+        $this->download = $num+1;
+        $this->db->update('book_files', $this, array('id' => $id));
+    }
+    
     public function show_categories($id) {
         $this->db->where('language_id', $id);
         $query = $this->db->get('categories');
