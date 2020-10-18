@@ -47,9 +47,11 @@
                 <td>
                     <?php
                     $filename = 'data/books/bk' . $row['id'] . '/' . $item['file_name'];
+                    if (file_exists($filename)) {
                     $filesize = get_file_info($filename);
                     $filesize = intval($filesize['size']);
                     echo byte_format($filesize);
+                    }
                     ?>
                 </td>
                 <td><?php echo anchor('book/download/' . $item['id'], 'Download', 'class="w3-button w3-hover-green w3-red"') ?></td>
