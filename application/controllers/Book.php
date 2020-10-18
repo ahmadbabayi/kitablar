@@ -138,6 +138,7 @@ class Book extends CI_Controller {
         if (!empty($metadata)) {
             $data['row'] = $metadata;
             $data['filerow'] = $this->book_model->show_files($id);
+            $this->book_model->update_hit($id,$metadata['hits']);
 
             $data['description'] = $metadata['description'];
             $data['keywords'] = $metadata['keywords'];
