@@ -21,6 +21,7 @@
         <li>Author: <?php echo $row['author']; ?></li>
         <li>Translated by: <?php echo $row['translator']; ?></li>
         <li>ISBN: <?php echo $row['isbn']; ?></li>
+        <li>Language: <?php echo anchor('book/language/'.$row['language'],$this->lang->line('l'.$row['language'])); ?></li>
         <li>Viewed: <?php echo $row['hits']; ?></li>
     </ul>
     <div class="w3-panel">

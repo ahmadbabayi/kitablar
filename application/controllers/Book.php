@@ -132,6 +132,7 @@ class Book extends CI_Controller {
         $this->load->helper('download');
         $this->load->helper('number');
         $this->load->helper('date');
+        $this->lang->load('dil', 'english');
         $ip = $this->input->ip_address();
         $this->session->set_userdata('downloadtoken', $ip);
         $metadata = $this->book_model->show_books($id);

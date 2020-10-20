@@ -48,7 +48,7 @@ class Book_model extends CI_Model {
     }
 
     public function show_books($id) {
-        $this->db->select('books.id,books.title,books.author,books.translator,books.isbn,books.hits,books.description,books.keywords,users.username');
+        $this->db->select('books.id,books.title,books.author,books.translator,books.language,books.isbn,books.hits,books.description,books.keywords,users.username');
         $this->db->from('books');
         $this->db->where('books.id', $id);
         $this->db->join('users', 'users.id = books.user_id', 'left');

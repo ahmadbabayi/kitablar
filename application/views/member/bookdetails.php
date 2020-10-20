@@ -39,14 +39,14 @@
                     echo 'checked';
                 }
                 ?>>
-    <?php echo $value['title']; ?><br>
-<?php endforeach; ?>
+                <?php echo $value['title']; ?><br>
+            <?php endforeach; ?>
             <input type="submit" value="Submit">
             </form>
         </div>
         <div id="loadergif"><img alt="upload" src="<?php echo base_url('images/upload.gif'); ?>"></div>
         <div>
-<?php echo form_open_multipart('member/changecover'); ?>
+            <?php echo form_open_multipart('member/changecover'); ?>
             <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
             <label>Change E-book cover image!</label><br />
             <input type="file" name="cover" onchange="form.submit();" />
@@ -54,7 +54,7 @@
             </form>
         </div>
         <div>
-<?php echo form_open_multipart('member/bookfileuploading'); ?>
+            <?php echo form_open_multipart('member/bookfileuploading'); ?>
             <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
             <label>Select an E-book file for uploading!</label><br />
             <input type="file" name="bookfile" onchange="form.submit(), showuploadgif()" />
@@ -66,7 +66,7 @@
                 <td>Format</td>
                 <td colspan="3">Size</td>
             </tr>
-<?php foreach ($filerow as $item): ?>
+            <?php foreach ($filerow as $item): ?>
 
                 <tr>
                     <td>
@@ -88,7 +88,7 @@
                     <td><a class="w3-button w3-hover-green w3-red" href="<?php echo base_url($filename); ?>">Download</a></td>
                     <td><a href="<?php echo site_url() . '/member/removefile/' . $row['id'] . '/' . $item['id']; ?>" class="w3-button w3-hover-green w3-red" onclick="return confirm('Are you sure you want to delete this item?');">remove</a></td>
                 </tr>
-<?php endforeach; ?>
+            <?php endforeach; ?>
 
         </table>
     </div>
