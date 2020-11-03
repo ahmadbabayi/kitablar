@@ -122,5 +122,13 @@ class Book_model extends CI_Model {
         $query = $this->db->get('book_category');
         return $query->result_array();
     }
+    
+    public function show_related_books($id) {
+        $this->db->where('language', $id);
+        $this->db->where('active', 1);
+        $this->db->order_by('id', 'random');
+        $query = $this->db->get('books', 6);
+        return $query->result_array();
+    }
 
 }
