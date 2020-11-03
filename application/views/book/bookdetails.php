@@ -10,6 +10,7 @@
         </div>
         <?php
     }
+    if($row['language'] == 1 || $row['language'] == 3){ $dir = 'rtl'; } else { $dir = 'ltr'; }
     $link = 'data/books/bk' . $row['id'] . '/cover.jpg';
     if (!file_exists($link)) {
         $link = '/data/kitab.gif';
@@ -25,10 +26,10 @@
         <li>Viewed: <?php echo $row['hits']; ?></li>
     </ul>
     <div class="w3-panel">
-        <p>
+        <p style="direction: <?php echo $dir; ?>">
             <?php echo nl2br($row['description']); ?>
         </p>
-    </div> 
+    </div>
     <table class="w3-table w3-border">
         <tr class="w3-green">
             <th>Format</th>
