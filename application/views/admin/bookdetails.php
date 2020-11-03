@@ -13,7 +13,7 @@
     echo '</li>';
 } ?>
         <li><?php echo anchor('admin/editbook/' . $row['id'], 'edit E-book details'); ?></li>
-        <li><a href="<?php echo site_url() . '/admin/removebook/' . $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this item?');">remove E-book</a></li>
+        <li><a href="<?php echo site_url() . 'admin/removebook/' . $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this item?');">remove E-book</a></li>
     </ul>
 </div>
 <div class="membermain">

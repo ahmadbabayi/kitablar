@@ -1,7 +1,7 @@
 <div class="w3-container w3-center">
     <div class="w3-bar">
         <?php
-        if (isset($_SESSION['username']) && $_SESSION['logged_in'] === true) {
+        if (isset($_SESSION['username']) && $_SESSION['logged_in'] === true && $this->session->userdata('user_id') == $row['user_id']) {
             echo anchor('member/addbook', 'Add new E-book', 'class="w3-bar-item w3-button w3-mobile"');
             echo anchor('member/editbook/' . $row['id'], 'edit E-book details', 'class="w3-bar-item w3-button w3-mobile"');
             echo anchor('member/bookdetails/' . $row['id'], 'book details and file uploads', 'class="w3-bar-item w3-button w3-mobile"');

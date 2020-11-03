@@ -109,6 +109,8 @@ class Member extends CI_Controller {
             $this->load->view('header', $data);
             $this->load->view('member/bookdetails', $data);
             $this->load->view('footer');
+        } else {
+            show_404();
         }
     }
 
@@ -182,10 +184,15 @@ class Member extends CI_Controller {
     public function removebook($id) {
         $id = intval($id);
         if ($id > 0) {
-            if ($this->db->query('delete from books where id=' . $id . ' and user_id=' . $this->session->userdata('user_id'))) {
-                $dir = './data/books/bk' . $id . '/';
-                $dir2 = './data/trash/bk' . $id . '/';
-                rename($dir, $dir2);
+            $data['row'] = $this->member_model->show_books($id);
+            if (!empty($data['row'])) {
+                if ($this->db->query('delete from books where id=' . $id )) {
+                    $dir = './data/books/bk' . $id . '/';
+                    $dir2 = './data/trash/bk' . $id . '/';
+                    rename($dir, $dir2);
+                }
+            } else {
+                show_404();
             }
         }
         redirect('member/booklist/', 'location');

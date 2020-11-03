@@ -87,43 +87,6 @@ class Member_model extends CI_Model {
         $this->db->update('users', $this, array('id' => $id));
     }
 
-    public function get_library($userid) {
-        $this->db->where('user_id', $userid);
-        $query = $this->db->get('library');
-        return $query->result_array();
-    }
-
-    public function insert_library() {
-        $this->title = $this->input->post('title');
-        $this->user_id = $this->session->userdata('user_id');
-
-        $this->db->insert('library', $this);
-    }
-    
-    public function library_book_ids($id) {
-        $this->db->select('book_ids');
-        $this->db->where('id',$id);
-        $this->db->where('user_id',$this->session->userdata('user_id'));
-        $query = $this->db->get('library');
-        return $query->row_array();
-    }
-
-    public function show_library_books($ids) {
-        $this->db->where_in('id', $ids);
-        $query = $this->db->get('books');
-        return $query->result_array();
-    }
-    
-    public function insert_library_book($id,$book_ids) {
-        $this->book_ids = $book_ids;
-        $this->db->update('library', $this, array('id' => $id, 'user_id' => $this->session->userdata('user_id')));
-    }
-    
-    public function show_library_name($id) {
-        $query = $this->db->get_where('library', array('id' => $id));
-        return $query->row_array();
-    }
-
     public function get_categories($id) {
         $this->db->where('language_id',$id);
         $query = $this->db->get('categories');
