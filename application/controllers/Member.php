@@ -262,69 +262,6 @@ class Member extends CI_Controller {
         }
     }
 
-    public function booklibrary() {
-        $data['booklist'] = $this->member_model->get_library($this->session->userdata('user_id'));
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'mamber area';
-        $this->load->view('header', $data);
-        $this->load->view('member/main');
-        $this->load->view('member/librarylist', $data);
-        $this->load->view('footer');
-    }
-
-    public function addlibrary() {
-        $this->load->library('form_validation');
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'mamber area';
-        $this->load->view('header', $data);
-        $this->load->view('member/main');
-        $this->load->view('member/addlibrary');
-        $this->load->view('footer');
-    }
-
-    public function addinglibrary() {
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'mamber area';
-        $this->load->helper(array('form', 'url'));
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('title', 'Title', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->load->view('header', $data);
-            $this->load->view('member/addlibrary');
-            $this->load->view('footer');
-        } else {
-            $this->member_model->insert_library();
-            $data['booklist'] = $this->member_model->get_library($this->session->userdata('user_id'));
-            $this->load->view('header', $data);
-            $this->load->view('member/main');
-            $this->load->view('member/librarylist', $data);
-            $this->load->view('footer');
-        }
-    }
-
-    public function librarydetails($id) {
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'mamber area';
-        $this->load->helper('number');
-        $this->load->library('form_validation');
-        $bookids = $this->member_model->library_book_ids($id);
-        if (!empty($bookids)) {
-            $ids = explode(' ', $bookids['book_ids']);
-            $data['booklist'] = $this->member_model->show_library_books($ids);
-            $data['id'] = $id;
-            $this->load->view('header', $data);
-            $this->load->view('member/main');
-            $this->load->view('member/librarydetails', $data);
-            $this->load->view('footer');
-        }
-    }
-
     public function categoryadd() {
         $id = $this->input->post('id');
         $this->member_model->insert_category();

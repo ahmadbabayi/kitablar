@@ -7,7 +7,7 @@ echo validation_errors();
     <a href="javascript:history.go(-1)">Back</a>
 </div>
 
-<?php echo form_open_multipart('admin/useradding'); ?>
+<?php echo form_open_multipart('admin/useradd'); ?>
 <input type="hidden" name="type" value="1" />
 <table>
     <tr>

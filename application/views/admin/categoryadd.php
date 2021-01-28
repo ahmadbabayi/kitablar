@@ -7,7 +7,7 @@ echo validation_errors();
     <a href="javascript:history.go(-1)">Back</a>
 </div>
 
-<?php echo form_open_multipart('admin/categoryadding'); ?>
+<?php echo form_open_multipart('admin/categoryadd'); ?>
 <table>
     <tr>
         <td>category name</td><td><input type="text" name="title"></td>

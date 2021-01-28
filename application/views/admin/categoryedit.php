@@ -6,7 +6,7 @@ echo validation_errors();
         <li><?php echo anchor('admin/categorydetails/' . $row['id'], 'back'); ?></li>
     </ul>
 </div>
-<?php echo form_open('admin/categoryediting'); ?>
+<?php echo form_open('admin/categoryedit'); ?>
 <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
 <input type="hidden" name="lang_code" value="<?php echo $row['language_id']; ?>" />
 <table class="memberedit">

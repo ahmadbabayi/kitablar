@@ -23,7 +23,7 @@
                     <a id="nav2" href="<?= base_url('book') ?>" class="w3-button w3-block w3-green">E-books</a>
                 </div>
 
-                <?php if (isset($_SESSION['username']) && $_SESSION['logged_in'] === true) : ?><div class="w3-col s3"><a href="<?= base_url('member') ?>" class="w3-button w3-block w3-green">Member area</a></div><div class="w3-col s3"><a href="<?= base_url('user/logout') ?>" class="w3-button w3-block w3-green">Logout</a></div>
+                <?php if (isset($_SESSION['username']) && $_SESSION['logged_in'] === true) : ?><div class="w3-col s3"><a href="<?php echo base_url('member') ?>" class="w3-button w3-block w3-green"><?php echo $_SESSION['username'] ?></a></div><div class="w3-col s3"><a href="<?= base_url('user/logout') ?>" class="w3-button w3-block w3-green">Logout</a></div>
 
                 <?php else : ?>
                     <div class="w3-col s3"><a href="<?= base_url('contactus') ?>" class="w3-button w3-block w3-green">Contact Us</a></div>

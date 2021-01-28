@@ -6,7 +6,7 @@ echo validation_errors();
         <li><?php echo anchor('admin/bookdetails/'. $row['id'], 'back'); ?></li>
     </ul>
 </div>
-<?php echo form_open_multipart('admin/editingbook'); ?>
+<?php echo form_open_multipart('admin/editbook'); ?>
 <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
 <input type="hidden" name="book_lang_code" value="<?php echo $row['language']; ?>" />
 <table class="memberedit">

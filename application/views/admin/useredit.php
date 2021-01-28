@@ -6,7 +6,7 @@ echo validation_errors();
         <li><?php echo anchor('admin/userdetails/'. $row['id'], 'back'); ?></li>
     </ul>
 </div>
-<?php echo form_open('admin/userediting'); ?>
+<?php echo form_open('admin/useredit'); ?>
 <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
 <table class="memberedit">
     <tr>

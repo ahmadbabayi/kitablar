@@ -62,7 +62,7 @@
 
     </table>
     <div class="w3-center">
-        <h2 class="w3-wide">Related E-books</h2>
+        <h2 class="w3-wide">You may also like</h2>
         <div class="w3-bar">
             <?php
             foreach ($related_books as $row):
