@@ -141,7 +141,6 @@ class Admin extends CI_Controller {
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
 
-
         $this->form_validation->set_rules('title', 'Title', 'required');
 
         if ($this->form_validation->run() == FALSE) {
@@ -295,7 +294,6 @@ class Admin extends CI_Controller {
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
 
-
         $this->form_validation->set_rules('username', 'User name', 'required');
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|is_unique[users.email]');
 
@@ -335,7 +333,6 @@ class Admin extends CI_Controller {
     public function categoryadd() {
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
-
 
         $this->form_validation->set_rules('title', 'category name', 'required');
         $this->form_validation->set_rules('lang', 'Language', 'is_natural_no_zero');
@@ -416,6 +413,116 @@ class Admin extends CI_Controller {
             $this->db->query('delete from contact where id=' . $id);
         }
         redirect('admin/contacts/', 'location');
+    }
+
+    public function exportzip() {
+        $data['description'] = '';
+        $data['keywords'] = '';
+        $data['title'] = 'admin area';
+        $filelist = $this->admin_model->show_all_files();
+        //$zip = new ZipArchive;
+        foreach ($filelist as $row) {
+            $filename = 'data/books/bk' . $row['book_id'] . '/' . $row['file_name'];
+            if (pathinfo($filename, PATHINFO_EXTENSION) == 'zip') {
+                echo anchor('book/details/' . $row['book_id'], $row['file_name'] . '--' . $row['book_id'] . '<br>');
+                //$res = $zip->open($filename);
+                $extractpath = 'data/books/bk' . $row['book_id'] . '/';
+                //$zip->extractTo($extractpath);
+                //$zip->close();
+                $pdffile = 'data/books/bk' . $row['book_id'] . '/' . basename($filename, ".zip") . '.apk';
+                if (file_exists($pdffile)) {
+                    echo 'zzzzzzzzz';
+                    $this->db->query('UPDATE `book_files` SET `file_name`="' . basename($pdffile) . '" WHERE id=' . $row['id']);
+                } else {
+                    if ($handle = opendir($extractpath)) {
+                        while (false !== ($entry = readdir($handle))) {
+                            if ($entry != "." && $entry != "..") {
+                                if (pathinfo($extractpath . $entry, PATHINFO_EXTENSION) == 'apk') {
+                                    echo '<br>------------------------------<br>';
+                                    rename($extractpath . $entry, $pdffile);
+                                }
+                                echo "$entry\n";
+                            }
+                        }
+                        closedir($handle);
+                    }
+                }
+                echo '<br><br>';
+            }
+        }
+    }
+
+    public function md5file() {
+        $data['description'] = '';
+        $data['keywords'] = '';
+        $data['title'] = 'admin area';
+        $filelist = $this->admin_model->show_all_files();
+        foreach ($filelist as $row) {
+            $filename = 'data/books/bk' . $row['book_id'] . '/' . $row['file_name'];
+            $extractpath = 'data/export/';
+            if (pathinfo($filename, PATHINFO_EXTENSION) == 'doc') {
+                echo anchor('book/details/' . $row['book_id'], $row['file_name'] . '--' . $row['book_id'] . '<br>');
+                if (file_exists($filename)) {
+                    $this->db->query('UPDATE `book_files` SET `md5file`="' . md5_file($filename) . '" WHERE id=' . $row['id']);
+                    //$handle = fopen($extractpath.'f'.$row['book_id'].'.txt', "w");
+                    //fwrite($handle, md5_file($filename));
+                    //copy($filename, $extractpath.'f'.$row['book_id'].'.pdf');
+                    //fclose($handle);
+                }
+                echo '<br><br>';
+            }
+        }
+    }
+
+    public function bookmetadata() {
+        $filelist = $this->admin_model->show_books2();
+        foreach ($filelist as $row) {
+            $filename = 'data/books/bk' . $row['book_id'] . '/' . $row['file_name'];
+            $extractpath = 'data/export/';
+            $format = 'doc';
+            if ($row['md5file'] != 0) {
+                if (pathinfo($filename, PATHINFO_EXTENSION) == $format) {
+                    echo $row['book_id'] . '--' . $row['title'] . '--' . $row['file_name'] . '--' . $row['md5file'];
+                    echo '<br><br>';
+                    //$this->admin_model->insert_metadata($row,$format);
+                }
+            }
+        }
+    }
+
+    public function cleanfiles() {
+        $filelist = $this->admin_model->show_books3();
+        foreach ($filelist as $row) {
+            $filename = 'data/books/bk' . $row['book_id'] . '/' . $row['file_name'];
+            $exportpath = 'data/export/bk'. $row['book_id'];
+            $cover = 'data/books/bk' . $row['book_id'] . '/cover.jpg';
+            $coverthumb = 'data/books/bk' . $row['book_id'] . '/coverthumb.jpg';
+            //mkdir($exportpath);
+            copy($filename, $exportpath. '/' . $row['file_name']);
+            if (file_exists($cover)){
+                copy($cover, $exportpath. '/cover.jpg');
+                copy($coverthumb, $exportpath. '/coverthumb.jpg');
+            }
+        }
+    }
+
+    public function updatelang() {
+        $data['description'] = '';
+        $data['keywords'] = '';
+        $data['title'] = 'admin area';
+        $filelist = $this->admin_model->get_books();
+        foreach ($filelist as $row) {
+            $language = $row['language'];
+            if ($language == "aze") {
+                $this->db->query('UPDATE `books` SET `language`=2 WHERE id=' . $row['id']);
+                //$handle = fopen($extractpath.'f'.$row['book_id'].'.txt', "w");
+                //fwrite($handle, md5_file($filename));
+                //copy($filename, $extractpath.'f'.$row['book_id'].'.pdf');
+                //fclose($handle);
+
+                echo '<br>' . $row['id'] . '<br>';
+            }
+        }
     }
 
 }

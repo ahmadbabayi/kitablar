@@ -209,7 +209,7 @@ class Member extends CI_Controller {
 
         $config['upload_path'] = './data/books/bk' . $id . '/';
         $config['file_name'] = 'f' . $id;
-        $config['max_size'] = 7000;
+        $config['max_size'] = 10000;
         $config['allowed_types'] = 'jpg|zip|pdf|doc|docx|epub|txt|odt';
 
         $this->load->library('upload', $config);
