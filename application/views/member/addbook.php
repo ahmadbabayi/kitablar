@@ -1,8 +1,8 @@
-<div class="w3-container">
+<div class="w3-container w3-padding-64">
 <?php
 echo validation_errors();
 ?>
-<div class="memberbookadd">
+<div>
     <a class="w3-button" href="javascript:history.go(-1)">Back</a>
 </div>
 

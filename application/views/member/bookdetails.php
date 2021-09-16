@@ -1,4 +1,4 @@
-<div class="w3-container">
+<div class="w3-container w3-padding-64">
     <div>
         <?php echo anchor('book/details/' . $row['id'], 'back', 'class="w3-button"'); ?>
     </div>
@@ -17,7 +17,14 @@
                 <td>title: </td><td><?php echo $row['title']; ?></td>
             </tr>
             <tr>
-                <td>author: </td><td><?php echo $row['author']; ?></td>
+                <td>author: </td><td><?php
+                if (!empty($authors)){
+                    foreach ($authors as $author):
+                        $links[] = $author['author'];
+                    endforeach;
+                    print_r(implode(', ', $links));
+                }
+                    ?></td>
             </tr>
             <tr>
                 <td>translator: </td><td><?php echo $row['translator']; ?></td>

@@ -1,6 +1,6 @@
-<div class="w3-container">
-    <div class="w3-center">
-        <h2 class="w3-wide">New E-books</h2>
+<div class="w3-row w3-padding-64">
+    <div class="w3-container w3-center">
+        <h1 class="w3-text-teal">New E-books</h1>
         <div class="w3-bar">
             <?php
             foreach ($booklist as $row):
@@ -15,14 +15,18 @@
                     echo $link2;
                     ?>">
                         <img class="w3-border" src="<?php echo base_url($link); ?>">
-                    <p><?php echo $row['title']; ?></p>
+                        <p><?php echo $row['title']; ?></p>
                     </a>
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
-    <div class="w3-center">
-        <h2 class="w3-wide">Top E-books</h2>
+
+</div>
+
+<div class="w3-row">
+    <div class=" w3-container w3-center">
+        <h1 class="w3-text-teal">Top E-books</h1>
         <div class="w3-bar">
             <?php
             foreach ($topbooklist as $row):
@@ -37,11 +41,10 @@
                     echo $link2;
                     ?>">
                         <img class="w3-border" src="<?php echo base_url($link); ?>">        
-                    <p><?php echo $row['title']; ?></p>
+                        <p><?php echo $row['title']; ?></p>
                     </a>
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
-
 </div>

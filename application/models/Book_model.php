@@ -46,9 +46,19 @@ class Book_model extends CI_Model {
         $query = $this->db->get('books');
         return $query->result_array();
     }
+    
+    public function fetch_author_records($id) {
+        $this->db->select('books.*');
+        $this->db->from('books');
+        $this->db->where('books.active', 1);
+        $this->db->order_by('books.id', 'DESC');
+        $this->db->join('users', 'users.id = books.user_id', 'left');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 
     public function show_books($id) {
-        $this->db->select('books.id,books.title,books.author,books.translator,books.language,books.isbn,books.hits,books.user_id,books.description,books.keywords,users.username');
+        $this->db->select('books.id,books.title,books.translator,books.language,books.isbn,books.hits,books.user_id,books.description,books.keywords,users.username');
         $this->db->from('books');
         $this->db->where('books.id', $id);
         $this->db->join('users', 'users.id = books.user_id', 'left');
@@ -100,6 +110,22 @@ class Book_model extends CI_Model {
     public function update_download_hit($id,$num) {
         $this->download = $num+1;
         $this->db->update('book_files', $this, array('id' => $id));
+    }
+    
+    public function get_authors($id) {
+        $this->db->select('book_author.author_id,authors.author');
+        $this->db->where('book_id',$id);
+        $this->db->from('book_author');
+        $this->db->join('authors', 'authors.id = book_author.author_id', 'left');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    public function get_book_authors($id) {
+        $this->db->select('book_id');
+        $this->db->where('author_id',$id);
+        $query = $this->db->get('book_author');
+        return $query->result_array();
     }
     
     public function show_categories($id) {

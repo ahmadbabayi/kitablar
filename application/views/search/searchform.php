@@ -1,7 +1,7 @@
 <?php
 echo validation_errors();
 ?>
-<div class="searchmain">
+<div class="w3-container w3-padding-64">
     <p>No result!</p>
     <?php echo form_open('search'); ?>
     <input type="hidden" name="type" value="1" />
@@ -11,7 +11,7 @@ echo validation_errors();
 </div>
 
 </form>
-<div class="searchmain">
+<div class="w3-container">
 <script>
   (function() {
     var cx = '001740427668226804337:qu4vopgwere';

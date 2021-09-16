@@ -35,15 +35,22 @@ class Member_model extends CI_Model {
 
     public function insert_book() {
         $this->language = $this->input->post('book_lang');
-        $this->title = $this->input->post('title');
-        $this->author = $this->input->post('author');
-        $this->translator = $this->input->post('translator');
+        $this->title = arab2farsi($this->input->post('title'));
+        $this->translator = arab2farsi($this->input->post('translator'));
         $this->isbn = $this->input->post('isbn');
-        $this->description = $this->input->post('description');
+        $this->description = arab2farsi($this->input->post('description'));
         $this->user_id = $this->session->userdata('user_id');
         $this->date = time();
 
         $this->db->insert('books', $this);
+        
+        unset($this->language);
+        unset($this->title);
+        unset($this->translator);
+        unset($this->isbn);
+        unset($this->description);
+        unset($this->user_id);
+        unset($this->date);
     }
 
     public function insert_book_file($id, $filename) {
@@ -62,14 +69,20 @@ class Member_model extends CI_Model {
         }
 
         $this->title = $this->input->post('title');
-        $this->author = $this->input->post('author');
         $this->translator = $this->input->post('translator');
         $this->isbn = $this->input->post('isbn');
         $this->description = $this->input->post('description');
         $this->date = time();
         $id = $this->input->post('id');
 
-        $this->db->update('books', $this, array('id' => $id));
+        $this->db->update('books', $this, array('id' => $id));     
+        
+        unset($this->language);
+        unset($this->title);
+        unset($this->translator);
+        unset($this->isbn);
+        unset($this->description);
+        unset($this->date);
     }
 
     public function show_profile($id) {
@@ -85,6 +98,40 @@ class Member_model extends CI_Model {
         $id = $this->input->post('id');
 
         $this->db->update('users', $this, array('id' => $id));
+    }
+    
+    public function get_authors($id) {
+        $this->db->select('book_author.author_id,authors.author');
+        $this->db->where('book_id',$id);
+        $this->db->from('book_author');
+        $this->db->join('authors', 'authors.id = book_author.author_id', 'left');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    public function search_author($author) {
+        $query = $this->db->query('SELECT id FROM authors WHERE BINARY author = "'.$author.'"');
+        $row = $query->row();
+        if ($query->num_rows()>0) {
+            return $row->id;
+        } else {
+            return 0;
+        }
+    }
+    
+    public function insert_author($author) {
+        $this->author = $author;
+        $this->db->insert('authors', $this);
+        unset($this->author);
+        return $this->db->insert_id();
+    }
+    
+    public function insert_book_author($id,$author_id) {
+        $this->book_id = $id;
+        $this->author_id = $author_id;
+        $this->db->insert('book_author', $this);
+        unset($this->book_id);
+        unset($this->author_id);
     }
 
     public function get_categories($id) {

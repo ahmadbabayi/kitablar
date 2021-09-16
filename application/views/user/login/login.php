@@ -1,4 +1,4 @@
-<div class="w3-container">
+<div class="w3-container w3-padding-64">
     <div class="w3-center" style="width: 300px; margin: auto;">
     <h1>Login</h1>
     <?php

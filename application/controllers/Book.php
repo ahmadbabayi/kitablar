@@ -34,7 +34,6 @@ class Book extends CI_Controller {
         $data['keywords'] = 'آذربایجانجا  Azərbaycanca فارسی Türkçe English other';
         $data['title'] = 'E-book list';
         $this->load->view('header', $data);
-        $this->load->view('book/languages');
         $this->load->view('book/booklist', $data);
         $this->load->view('footer');
     }
@@ -55,7 +54,6 @@ class Book extends CI_Controller {
         $data['keywords'] = 'آذربایجانجا  Azərbaycanca فارسی Türkçe English other';
         $data['title'] = 'E-book list';
         $this->load->view('header', $data);
-        $this->load->view('book/languages');
         $this->load->view('book/booklist', $data);
         $this->load->view('footer');
     }
@@ -72,7 +70,7 @@ class Book extends CI_Controller {
             $data['categorylist'] = $this->book_model->show_categories($lang);
         }
         $data['lang'] = $lang;
-        
+
         if ($catid > 0) {
             //meta information
             $data['description'] = '';
@@ -89,11 +87,10 @@ class Book extends CI_Controller {
                 $data['booklist'] = $this->book_model->show_category_books($bookids);
             }
             $this->load->view('header', $data);
-                $this->load->view('book/languages');
-                $this->load->view('book/categorybooklist', $data);
-                $this->load->view('footer');
+            $this->load->view('book/categorybooklist', $data);
+            $this->load->view('footer');
         } else {
-            
+
             //change pagination method
             $total_row = $this->book_model->record_language_count($lang);
             $config['total_rows'] = $total_row;
@@ -122,6 +119,33 @@ class Book extends CI_Controller {
         }
     }
 
+    public function author() {
+        $id = intval($this->uri->segment(4, 0));
+        if ($id == 0) {
+            redirect('book', 'location');
+        }
+        $data['description'] = '';
+        $data['keywords'] = '';
+        $data['title'] = 'search page';
+
+        //author book list
+        $ids = $this->book_model->get_book_authors($id);
+        if (!empty($ids)) {
+            foreach ($ids as $value) {
+                $bookids[] = $value['book_id'];
+            }
+            $data['booklist'] = $this->book_model->show_category_books($bookids);
+        }
+        if (!empty($data['booklist'])) {
+
+            $this->load->view('header', $data);
+            $this->load->view('search/booklist', $data);
+            $this->load->view('footer');
+        } else {
+            show_404();
+        }
+    }
+
     public function details() {
         $id = intval($this->uri->segment(3, 0));
         if ($id == 0) {
@@ -135,12 +159,13 @@ class Book extends CI_Controller {
         $this->lang->load('dil', 'english');
         $ip = $this->input->ip_address();
         $this->session->set_userdata('downloadtoken', $ip);
+        $data['authors'] = $this->book_model->get_authors($id);
         $metadata = $this->book_model->show_books($id);
         if (!empty($metadata)) {
             $data['row'] = $metadata;
             $data['filerow'] = $this->book_model->show_files($id);
             $data['related_books'] = $this->book_model->show_related_books($metadata['language']);
-            $this->book_model->update_hit($id,$metadata['hits']);
+            $this->book_model->update_hit($id, $metadata['hits']);
 
             $data['description'] = $metadata['description'];
             $data['keywords'] = $metadata['keywords'];
@@ -199,8 +224,8 @@ class Book extends CI_Controller {
             redirect('book/details/' . $item['book_id'], 'location');
         }
         $this->load->helper('download');
-        
-        $this->book_model->update_download_hit($id,$item['download']);
+
+        $this->book_model->update_download_hit($id, $item['download']);
 
         $filename = './data/books/bk' . $item['book_id'] . '/' . $item['file_name'];
         force_download($filename, NULL);

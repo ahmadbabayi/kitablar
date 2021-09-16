@@ -28,7 +28,7 @@ class Member extends CI_Controller {
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(array('form', 'url', 'str_helper'));
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('title', 'Title', 'required');
@@ -41,6 +41,19 @@ class Member extends CI_Controller {
         } else {
             $this->member_model->insert_book();
             $id = $this->db->insert_id();
+
+            $authors = $this->member_model->get_book_authors($id);
+            $authors = explode(',', $authors);
+            $this->db->query('delete from book_author where book_id=' . $id);
+            foreach ($authors as $author) {
+                if ($author != '') {
+                    $author_id = $this->member_model->search_author($author);
+                    if ($author_id == 0) {
+                        $author_id = $this->member_model->insert_author($author);
+                    }
+                    $this->member_model->insert_book_author($id, $author_id);
+                }
+            }
 
             $dir = './data/books/bk' . $id . '/';
             mkdir($dir);
@@ -98,6 +111,7 @@ class Member extends CI_Controller {
         $data['row'] = $this->member_model->show_books($id);
         if (!empty($data['row'])) {
             $lang = $data['row'];
+            $data['authors'] = $this->member_model->get_authors($id);
             $data['filerow'] = $this->member_model->show_files($id);
             $data['categorylist'] = $this->member_model->get_categories($lang['language']);
             $selectedcat = $this->member_model->get_book_categories($id);
@@ -125,6 +139,7 @@ class Member extends CI_Controller {
         $data['title'] = 'mamber area';
         if ($id > 0) {
             $data['row'] = $this->member_model->show_books($id);
+            $data['authors'] = $this->member_model->get_authors($id);
             if (!empty($data['row'])) {
                 $this->load->helper(array('form', 'url'));
                 $this->load->library('form_validation');
@@ -137,6 +152,21 @@ class Member extends CI_Controller {
                     $this->load->view('footer');
                 } else {
                     $this->member_model->update_book();
+
+                    $authors = $this->input->post('authors');
+                    $authors = explode(',', $authors);
+                    $this->db->query('delete from book_author where book_id=' . $id);
+                    foreach ($authors as $author) {
+                        $author = trim($author);
+                        if ($author != '') {
+                            $author_id = $this->member_model->search_author($author);
+                            if ($author_id == 0) {
+                                $author_id = $this->member_model->insert_author($author);
+                            }
+                            $this->member_model->insert_book_author($id, $author_id);
+                        }
+                    }
+
                     redirect('member/bookdetails/' . $id, 'location');
                 }
             } else {
@@ -186,7 +216,7 @@ class Member extends CI_Controller {
         if ($id > 0) {
             $data['row'] = $this->member_model->show_books($id);
             if (!empty($data['row'])) {
-                if ($this->db->query('delete from books where id=' . $id )) {
+                if ($this->db->query('delete from books where id=' . $id)) {
                     $dir = './data/books/bk' . $id . '/';
                     $dir2 = './data/trash/bk' . $id . '/';
                     rename($dir, $dir2);

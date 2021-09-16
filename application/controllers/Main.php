@@ -14,7 +14,6 @@ class Main extends CI_Controller {
         $data['keywords'] = 'kitablar kitaplar kitab kitap ketab elekteron dicital elektronik pdf dərslik məktəb azeri azəri ebook free ebook yüklə endir yükle download ədəbiyyat tarix uşaq internet bilgisayar din kömpyuter türkcə türkçe library کتاب کیتاب دانلود رایگان کتب دیجیتال الکترونیک کامپیوتر اینترنت تاریخ تاریخی ادبیات داستان رمان آموزش آموزشی شعر زبان درسی درس پی دی اف ایبوک مجانی';
         $data['title'] = 'Kitablar free E-book management system';
         $this->load->view('header', $data);
-        $this->load->view('book/languages');
         $this->load->view('main', $data);
         $this->load->view('footer');
     }

@@ -1,4 +1,4 @@
-<div class="w3-container">
+<div class="w3-container w3-padding-64">
     <div>
         <h3>Member area </h3>
         <ul class="w3-ul">

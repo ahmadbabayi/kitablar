@@ -1,4 +1,4 @@
-<div class="w3-container w3-center">
+<div class="w3-container" style="padding-top: 80px;">
 <div class="w3-bar">
     <?php
     echo anchor('book/language/2', 'Azərbaycan dili', 'id="lang2" class="w3-bar-item w3-button  w3-mobile"');

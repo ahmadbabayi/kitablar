@@ -1,4 +1,4 @@
-<div class="w3-container">
+<div class="w3-container" style="padding-top: 100px;">
     <div class="w3-bar">
         <?php
         foreach ($booklist as $row):
