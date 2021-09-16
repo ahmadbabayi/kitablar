@@ -12,7 +12,7 @@ class Test extends CI_Controller {
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'admin area';
-        $this->load->view('template3',$data);
+        $this->load->view('template3', $data);
     }
 
     public function exportzip() {
@@ -53,9 +53,6 @@ class Test extends CI_Controller {
     }
 
     public function md5file() {
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'admin area';
         $filelist = $this->test_model->show_all_files();
         foreach ($filelist as $row) {
             $filename = 'data/books/bk' . $row['book_id'] . '/' . $row['file_name'];
@@ -69,6 +66,33 @@ class Test extends CI_Controller {
                     //copy($filename, $extractpath.'f'.$row['book_id'].'.pdf');
                     //fclose($handle);
                 }
+                echo '<br><br>';
+            }
+        }
+    }
+
+    public function files() {
+        $filelist = $this->test_model->show_all_files();
+        foreach ($filelist as $row) {
+            $filename = 'data/books/bk' . $row['book_id'] . '/' . $row['file_name'];
+
+            if (!file_exists($filename)) {
+                echo anchor('book/details/' . $row['book_id'], $row['file_name'] . '--' . $row['book_id'] . '<br>');
+                echo '<br><br>';
+            }
+        }
+    }
+
+    public function format() {
+        $filelist = $this->test_model->show_all_files();
+        foreach ($filelist as $row) {
+            $filename = 'data/books/bk' . $row['book_id'] . '/' . $row['file_name'];
+            $rmstr = 'data/books/bk' . $row['book_id'] . '/';
+            $format = 'html';
+            if (pathinfo($filename, PATHINFO_EXTENSION) == $format) {
+                echo anchor('book/details/' . $row['book_id'], $row['file_name'] . '--' . $row['book_id'] . '<br>');
+                $this->db->query('UPDATE `book_files` SET `format`="' . $format . '" WHERE id=' . $row['id']);
+                //rename($filename, $filename.'l');
                 echo '<br><br>';
             }
         }
@@ -182,8 +206,8 @@ class Test extends CI_Controller {
         foreach ($list as $value) {
             $author_id = $this->test_model->search_author($value['id']);
             if ($author_id == 0) {
-                echo $value['author'].'<br>';
-                $this->db->query('delete from authors where id='.$value['id']);
+                echo $value['author'] . '<br>';
+                $this->db->query('delete from authors where id=' . $value['id']);
             }
         }
     }

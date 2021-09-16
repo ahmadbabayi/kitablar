@@ -156,5 +156,12 @@ class Book_model extends CI_Model {
         $query = $this->db->get('books', 6);
         return $query->result_array();
     }
+    
+    public function show_formats() {
+        $this->db->select('format');
+        $this->db->distinct();
+        $query = $this->db->get('book_files');
+        return $query->result_array();
+    }
 
 }
