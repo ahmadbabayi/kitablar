@@ -1,4 +1,4 @@
-<div class="w3-row" style="padding-top: 64px;">
+<div class="w3-container w3-row" style="padding-top: 64px;">
     <div class="w3-container">
         <h1 class="w3-text-teal">All books</h1>
         <p><?php echo $totalrows; ?> E-books in <?php echo $pages; ?> pages.</p>
@@ -6,7 +6,7 @@
 
 </div>
 
-<div class="w3-bar">
+<div class="w3-container w3-bar">
     <?php echo $pagination; ?>
 </div>
 
@@ -28,6 +28,6 @@
     <?php endforeach; ?>
 </div>
 
-<div class="w3-bar">
+<div class="w3-container w3-bar">
     <?php echo $pagination; ?>
 </div>

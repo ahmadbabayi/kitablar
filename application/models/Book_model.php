@@ -16,6 +16,30 @@ class Book_model extends CI_Model {
         $this->db->where('active', 1);
         return $this->db->count_all_results('books');
     }
+    
+    
+    public function record_format_count($format) {
+        $this->db->select('book_files.book_id,book_files.format,books.*');
+        $this->db->from('book_files');
+        $this->db->where('books.active', 1);
+        $this->db->where('book_files.format', $format);
+        $this->db->order_by('books.id', 'DESC');
+        $this->db->join('books', 'books.id = book_files.book_id', 'left');
+        //$query = $this->db->get();
+        return $this->db->count_all_results();
+    }
+    
+    public function fetch_format_records($limit, $start, $format) {
+        $this->db->select('book_files.book_id,book_files.format,books.*');
+        $this->db->from('book_files');
+        $this->db->where('books.active', 1);
+        $this->db->where('book_files.format', $format);
+        $this->db->order_by('books.id', 'DESC');
+        $this->db->join('books', 'books.id = book_files.book_id', 'left');
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+                return $query->result_array();
+    }
 
     public function record_category_book_count($lang) {
         $this->db->where('language', $lang);

@@ -3,7 +3,7 @@
     <ul class="w3-ul w3-border">
         <?php
         foreach ($authorlist as $author):
-            echo anchor('format/extension/' . $author['format'], '<li class="w3-hover-green">'.$author['format'].'</li>');
+            echo anchor('format/ext/' . $author['format'], '<li class="w3-hover-green">'.$author['format'].'</li>');
         endforeach;
         ?>
     </ul>
