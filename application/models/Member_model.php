@@ -35,8 +35,8 @@ class Member_model extends CI_Model {
 
     public function insert_book() {
         $this->language = $this->input->post('book_lang');
-        $this->title = arab2farsi($this->input->post('title'));
-        $this->translator = arab2farsi($this->input->post('translator'));
+        $this->title = ucfirst(arab2farsi($this->input->post('title')));
+        $this->translator = ucfirst(arab2farsi($this->input->post('translator')));
         $this->isbn = $this->input->post('isbn');
         $this->description = arab2farsi($this->input->post('description'));
         $this->user_id = $this->session->userdata('user_id');

@@ -28,10 +28,12 @@
         </tr>
         <tr>
             <td>author</td><td><input type="text" name="authors" value="<?php
-                foreach ($authors as $author):
-                    $links[] = $author['author'];
-                endforeach;
-                print_r(implode(', ', $links));
+                if (!empty($authors)) {
+                    foreach ($authors as $author):
+                        $links[] = $author['author'];
+                    endforeach;
+                    print_r(implode(', ', $links));
+                }
                 ?>"></td>
         </tr>
         <tr>

@@ -13,8 +13,8 @@ class Language extends CI_Controller {
         $data['authorlist'] = $this->author_model->show_authors();
         $total_row = $this->author_model->record_count();
         $data['totalrows'] = $total_row;
-        $data['description'] = 'E-book list in some languages';
-        $data['keywords'] = 'آذربایجانجا  Azərbaycanca فارسی Türkçe English other';
+        $data['description'] = 'E-book list Azərbaycan dili آذربایجان دیلی';
+        $data['keywords'] = 'آذربایجان دیلی, Azərbaycan dili, فارسی, ترکی, تورکی';
         $data['title'] = 'Language list';
         $this->load->view('header', $data);
         $this->load->view('language/languages');

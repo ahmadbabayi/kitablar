@@ -14,8 +14,8 @@ class Author extends CI_Controller {
         $data['authorlist'] = $this->author_model->show_authors();
         $total_row = $this->author_model->record_count();
         $data['totalrows'] = $total_row;
-        $data['description'] = 'E-book list in some languages';
-        $data['keywords'] = 'آذربایجانجا  Azərbaycanca فارسی Türkçe English other';
+        $data['description'] = 'Authgors list';
+        $data['keywords'] = 'authors, kitablar,Azərbaycan dili, آذربایجان دیلی, tarix, ədəbiyyat, roman, dərslik';
         $data['title'] = 'Author list';
         $this->load->view('header', $data);
         $this->load->view('author/authorlist', $data);

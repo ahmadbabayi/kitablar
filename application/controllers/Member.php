@@ -153,7 +153,7 @@ class Member extends CI_Controller {
                     $authors = explode(',', $authors);
                     $this->db->query('delete from book_author where book_id=' . $id);
                     foreach ($authors as $author) {
-                        $author = trim($author);
+                        $author = ucfirst(trim($author));
                         if ($author != '') {
                             $author_id = $this->member_model->search_author($author);
                             if ($author_id == 0) {

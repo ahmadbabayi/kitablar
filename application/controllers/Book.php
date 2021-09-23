@@ -59,8 +59,8 @@ class Book extends CI_Controller {
     }
 
     public function language() {
-        $lang = intval($this->uri->segment(3, 0));
-        if ($lang < 1 || $lang > 6) {
+        $lang = intval($this->uri->segment(4, 0));
+        if ($lang < 1 || $lang > 5) {
             redirect('book', 'location');
         }
 
@@ -83,7 +83,7 @@ class Book extends CI_Controller {
             }
             $data['pages'] = $pages;
             //meta information
-            $this->load->helper('language_meta_helper');
+            $this->load->helper('meta_data_helper');
             $data['description'] = lang_descriptions($lang);
             $data['keywords'] = lang_keywords($lang);
             $data['title'] = lang_title($lang);

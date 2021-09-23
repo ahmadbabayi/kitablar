@@ -20,8 +20,8 @@ class Format extends CI_Controller {
 
     public function index() {
         $data['authorlist'] = $this->book_model->show_formats();
-        $data['description'] = 'E-book list in some languages';
-        $data['keywords'] = 'آذربایجانجا  Azərbaycanca فارسی Türkçe English other';
+        $data['description'] = 'E-book format pdf epub doc text';
+        $data['keywords'] = 'pdf, epub, word, doc, txt';
         $data['title'] = 'Format list';
         $this->load->view('header', $data);
         $this->load->view('format/format');
@@ -46,9 +46,11 @@ class Format extends CI_Controller {
         }
         $data['pages'] = $pages;
 
-        $data['description'] = 'E-book list in some languages';
-        $data['keywords'] = 'آذربایجانجا  Azərbaycanca فارسی Türkçe English other';
-        $data['title'] = 'Author list';
+        $this->load->helper('meta_data_helper');
+        $data['description'] = format_descriptions($format);
+        $data['keywords'] = format_keywords($format);
+        $data['title'] = format_title($format);
+
         $this->load->view('header', $data);
         $this->load->view('book/booklist', $data);
         $this->load->view('footer');
