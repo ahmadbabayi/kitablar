@@ -7,7 +7,7 @@
     <ul>
         <?php foreach ($booklist as $row): ?>
         <li>   
-            <?php echo anchor('admin/categorydetails/'.$row['id'], $row['title']); ?>
+            <?php echo anchor('admin/categorydetails/'.$row['id'], $row['tag']); ?>
         </li>
         <?php endforeach; ?>
     </ul>

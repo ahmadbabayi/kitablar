@@ -22,7 +22,7 @@ class Format extends CI_Controller {
         $data['authorlist'] = $this->book_model->show_formats();
         $data['description'] = 'E-book list in some languages';
         $data['keywords'] = 'آذربایجانجا  Azərbaycanca فارسی Türkçe English other';
-        $data['title'] = 'Author list';
+        $data['title'] = 'Format list';
         $this->load->view('header', $data);
         $this->load->view('format/format');
         $this->load->view('footer');

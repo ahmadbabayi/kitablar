@@ -41,18 +41,6 @@ class Book_model extends CI_Model {
                 return $query->result_array();
     }
 
-    public function record_category_book_count($lang) {
-        $this->db->where('language', $lang);
-        $this->db->where('active', 1);
-        return $this->db->count_all_results('books');
-    }
-    
-    public function get_books() {
-        $this->db->order_by('id', 'DESC');
-        $query = $this->db->get('books');
-        return $query->result_array();
-    }
-
     public function fetch_records($limit, $start) {
         $this->db->limit($limit, $start);
         $this->db->where('active', 1);
@@ -81,7 +69,7 @@ class Book_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function show_books($id) {
+    public function show_book($id) {
         $this->db->select('books.id,books.title,books.translator,books.language,books.isbn,books.hits,books.user_id,books.description,books.keywords,users.username');
         $this->db->from('books');
         $this->db->where('books.id', $id);
@@ -99,31 +87,6 @@ class Book_model extends CI_Model {
     public function show_file($id) {
         $query = $this->db->get_where('book_files', array('id' => $id));
         return $query->row_array();
-    }
-
-    public function insert_book() {
-        $this->language = $this->input->post('book_lang');
-        $this->title = $this->input->post('title');
-        $this->author = $this->input->post('author');
-        $this->translator = $this->input->post('translator');
-        $this->isbn = $this->input->post('isbn');
-        $this->description = $this->input->post('description');
-        $this->date = time();
-
-        $this->db->insert('books', $this);
-    }
-    
-    public function update_book() {
-        $this->language = $this->input->post('book_lang');
-        $this->title = $this->input->post('title');
-        $this->author = $this->input->post('author');
-        $this->translator = $this->input->post('translator');
-        $this->isbn = $this->input->post('isbn');
-        $this->description = $this->input->post('description');
-        $this->date = time();
-        $id = $this->input->post('id');
-
-        $this->db->update('books', $this, array('id' => $id));
     }
     
     public function update_hit($id,$num) {
@@ -152,9 +115,19 @@ class Book_model extends CI_Model {
         return $query->result_array();
     }
     
-    public function show_categories($id) {
-        $this->db->where('language_id', $id);
-        $query = $this->db->get('categories');
+    public function get_tags($id) {
+        $this->db->select('book_tag.tag_id,tags.tag');
+        $this->db->where('book_id',$id);
+        $this->db->from('book_tag');
+        $this->db->join('tags', 'tags.id = book_tag.tag_id', 'left');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    public function get_book_tags($id) {
+        $this->db->select('book_id');
+        $this->db->where('tag_id',$id);
+        $query = $this->db->get('book_tag');
         return $query->result_array();
     }
     
@@ -163,13 +136,6 @@ class Book_model extends CI_Model {
         $this->db->where('active', 1);
         $this->db->order_by('id', 'DESC');
         $query = $this->db->get('books');
-        return $query->result_array();
-    }
-    
-    public function get_book_categories($id) {
-        $this->db->select('book_id');
-        $this->db->where('category_id',$id);
-        $query = $this->db->get('book_category');
         return $query->result_array();
     }
     

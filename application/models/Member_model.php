@@ -11,13 +11,13 @@ class Member_model extends CI_Model {
         return $this->db->count_all_results('books');
     }
 
-    public function get_books($userid) {
+    public function get_user_books($userid) {
         $this->db->where('user_id', $userid);
         $query = $this->db->get('books');
         return $query->result_array();
     }
 
-    public function show_books($id) {
+    public function show_book($id) {
         $query = $this->db->get_where('books', array('id' => $id , 'user_id' => $this->session->userdata('user_id')));
         return $query->row_array();
     }
@@ -136,27 +136,27 @@ class Member_model extends CI_Model {
 
     public function get_categories($id) {
         $this->db->where('language_id',$id);
-        $query = $this->db->get('categories');
+        $query = $this->db->get('tags');
         return $query->result_array();
     }
     
     public function insert_category() {
         $id = $this->input->post('id');
-        $this->db->query('delete from book_category where book_id='.$id);
-        $category = $this->input->post('category');
+        $this->db->query('delete from book_tag where book_id='.$id);
+        $category = $this->input->post('tags');
         $ins_array = array();
         if (!empty($category)){
         foreach ($category as $key => $value) {
             $ins_array[] = "('$id','$value')";
         }
-        $this->db->query('INSERT INTO `book_category` (`book_id`,`category_id`) VALUES'.  implode(',', $ins_array));
+        $this->db->query('INSERT INTO `book_tag` (`book_id`,`tag_id`) VALUES'.  implode(',', $ins_array));
         }
     }
     
     public function get_book_categories($id) {
-        $this->db->select('category_id');
+        $this->db->select('tag_id');
         $this->db->where('book_id',$id);
-        $query = $this->db->get('book_category');
+        $query = $this->db->get('book_tag');
         return $query->result_array();
     }
 }

@@ -12,15 +12,11 @@ class Member extends CI_Controller {
     }
 
     public function index() {
-        $data['booklist'] = $this->member_model->get_books($this->session->userdata('user_id'));
-        $total_row = $this->member_model->record_count($this->session->userdata('user_id'));
-        $data['totalrows'] = $total_row;
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
         $this->load->view('header', $data);
         $this->load->view('member/main');
-        $this->load->view('member/booklist', $data);
         $this->load->view('footer');
     }
 
@@ -72,7 +68,7 @@ class Member extends CI_Controller {
             $image2_path = $dir . 'coverthumb.jpg';
             create_thumb($image1_path, $image2_path, $box = 160);
 
-            $data['row'] = $this->member_model->show_books($id);
+            $data['row'] = $this->member_model->show_book($id);
             $data['filerow'] = $this->member_model->show_files($id);
             $lang = $data['row'];
             $data['categorylist'] = $this->member_model->get_categories($lang['language']);
@@ -93,7 +89,7 @@ class Member extends CI_Controller {
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
-        $data['booklist'] = $this->member_model->get_books($this->session->userdata('user_id'));
+        $data['booklist'] = $this->member_model->get_user_books($this->session->userdata('user_id'));
         $total_row = $this->member_model->record_count($this->session->userdata('user_id'));
         $data['totalrows'] = $total_row;
         $this->load->view('header', $data);
@@ -108,7 +104,7 @@ class Member extends CI_Controller {
         $data['title'] = 'mamber area';
         $this->load->helper('number');
         $this->load->library('form_validation');
-        $data['row'] = $this->member_model->show_books($id);
+        $data['row'] = $this->member_model->show_book($id);
         if (!empty($data['row'])) {
             $lang = $data['row'];
             $data['authors'] = $this->member_model->get_authors($id);
@@ -117,7 +113,7 @@ class Member extends CI_Controller {
             $selectedcat = $this->member_model->get_book_categories($id);
             $checkedcat = array();
             foreach ($selectedcat as $value) {
-                $checkedcat[] = $value['category_id'];
+                $checkedcat[] = $value['tag_id'];
             }
             $data['selectedcategory'] = $checkedcat;
             $this->load->view('header', $data);
@@ -138,7 +134,7 @@ class Member extends CI_Controller {
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
         if ($id > 0) {
-            $data['row'] = $this->member_model->show_books($id);
+            $data['row'] = $this->member_model->show_book($id);
             $data['authors'] = $this->member_model->get_authors($id);
             if (!empty($data['row'])) {
                 $this->load->helper(array('form', 'url'));
@@ -180,7 +176,7 @@ class Member extends CI_Controller {
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
         $id = $this->input->post('id');
-        $data['row'] = $this->member_model->show_books($id);
+        $data['row'] = $this->member_model->show_book($id);
         if (!empty($data['row'])) {
             $this->load->helper(array('form', 'url'));
             $this->load->library('form_validation');
@@ -214,7 +210,7 @@ class Member extends CI_Controller {
     public function removebook($id) {
         $id = intval($id);
         if ($id > 0) {
-            $data['row'] = $this->member_model->show_books($id);
+            $data['row'] = $this->member_model->show_book($id);
             if (!empty($data['row'])) {
                 if ($this->db->query('delete from books where id=' . $id)) {
                     $dir = './data/books/bk' . $id . '/';
@@ -259,7 +255,7 @@ class Member extends CI_Controller {
     }
 
     public function removefile($book_id, $id) {
-        $data['row'] = $this->member_model->show_books($book_id);
+        $data['row'] = $this->member_model->show_book($book_id);
         $item = $this->member_model->show_file($id);
         if (!empty($data['row'])) {
             if ($id > 0) {

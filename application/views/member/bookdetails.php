@@ -41,12 +41,12 @@
             <label>Select category</label><br>
             <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
             <?php foreach ($categorylist as $value): ?>
-                <input type="checkbox" name="category[]" value="<?php echo $value['id']; ?>" <?php
+                <input type="checkbox" name="tags[]" value="<?php echo $value['id']; ?>" <?php
                 if (in_array($value['id'], $selectedcategory)) {
                     echo 'checked';
                 }
                 ?>>
-                <?php echo $value['title']; ?><br>
+                <?php echo $value['tag']; ?><br>
             <?php endforeach; ?>
             <input type="submit" value="Submit">
             </form>

@@ -38,8 +38,7 @@ class Admin_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function show_books($id) {
-
+    public function show_book($id) {
         $query = $this->db->get_where('books', array('id' => $id));
         return $query->row_array();
     }
@@ -48,19 +47,6 @@ class Admin_model extends CI_Model {
         $this->db->where('book_id', $id);
         $query = $this->db->get('book_files');
         return $query->result_array();
-    }
-
-    public function insert_book() {
-        $this->language = $this->input->post('book_lang');
-        $this->title = $this->input->post('title');
-        $this->author = $this->input->post('author');
-        $this->translator = $this->input->post('translator');
-        $this->isbn = $this->input->post('isbn');
-        $this->description = $this->input->post('description');
-        $this->user_id = $this->session->userdata('user_id');
-        $this->date = time();
-
-        $this->db->insert('books', $this);
     }
 
     public function insert_book_file($id, $filename) {
@@ -119,8 +105,8 @@ class Admin_model extends CI_Model {
         $this->db->update('users', $this, array('id' => $id));
     }
 
-    public function get_categories() {
-        $query = $this->db->get('categories');
+    public function get_tags() {
+        $query = $this->db->get('tags');
         return $query->result_array();
     }
 

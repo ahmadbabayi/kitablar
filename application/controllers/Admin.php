@@ -111,15 +111,15 @@ class Admin extends CI_Controller {
         $data['title'] = 'admin area';
         $this->load->helper('number');
         $this->load->library('form_validation');
-        $data['row'] = $this->admin_model->show_books($id);
-        $lang = $this->admin_model->show_books($id);
+        $data['row'] = $this->admin_model->show_book($id);
+        $lang = $this->admin_model->show_book($id);
         $data['filerow'] = $this->admin_model->show_files($id);
         $this->load->model('member_model');
         $data['categorylist'] = $this->member_model->get_categories($lang['language']);
         $selectedcat = $this->member_model->get_book_categories($id);
         $checkedcat = array();
         foreach ($selectedcat as $value) {
-            $checkedcat[] = $value['category_id'];
+            $checkedcat[] = $value['tag_id'];
         }
         $data['selectedcategory'] = $checkedcat;
         $this->load->view('header', $data);
@@ -137,7 +137,7 @@ class Admin extends CI_Controller {
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'admin area';
-        $data['row'] = $this->admin_model->show_books($id);
+        $data['row'] = $this->admin_model->show_book($id);
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
 
@@ -160,7 +160,7 @@ class Admin extends CI_Controller {
         $data['keywords'] = '';
         $data['title'] = 'admin area';
         $id = $this->input->post('id');
-        $data['row'] = $this->admin_model->show_books($id);
+        $data['row'] = $this->admin_model->show_book($id);
         if (!empty($data['row'])) {
             $this->load->helper(array('form', 'url'));
             $this->load->library('form_validation');
@@ -323,7 +323,7 @@ class Admin extends CI_Controller {
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'admin area';
-        $data['booklist'] = $this->admin_model->get_categories();
+        $data['booklist'] = $this->admin_model->get_tags();
         $this->load->view('header', $data);
         $this->load->view('admin/main');
         $this->load->view('admin/categorylist', $data);

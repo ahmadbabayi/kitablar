@@ -25,3 +25,9 @@ function get_num_of_words($string) {
       $words = explode(" ", $string);
       return count($words);
 }
+
+function remove_bracket($str) {
+    $str = str_replace('(', '', $str);
+    $str = str_replace(')', '', $str);
+    return $str;
+}

@@ -21,24 +21,32 @@
     }
     ?>
     <h1><?php echo $row['title']; ?></h1>
-    <img class="w3-border" style="max-width: 100%; height: auto;" src="<?php echo base_url($link); ?>" alt="<?php echo$row['title']; ?>" border="1">
+    <img class="w3-border" style="max-width: 100%; height: auto;" src="<?php echo base_url($link); ?>" alt="<?php echo$row['title']; ?>">
     <ul class="w3-ul w3-card-4">
         <li>Authors: <?php
-        if (!empty($authors)){
-            foreach ($authors as $author):
-                $links[] = anchor('book/author/'.$author['author'].'/'.$author['author_id'], $author['author']);
-            endforeach;
-            print_r(implode(', ', $links));
-        }
-    ?></li>
-        <li>Translated by: <?php echo $row['translator']; ?></li>
+            if (!empty($authors)) {
+                foreach ($authors as $author):
+                    $links[] = anchor('book/author/' . remove_bracket($author['author']) . '/' . $author['author_id'], $author['author']);
+                endforeach;
+                print_r(implode(', ', $links));
+            }
+            ?></li>
         <li>ISBN: <?php echo $row['isbn']; ?></li>
         <li>Language: <?php echo anchor('book/language/' . $row['language'], $this->lang->line('l' . $row['language'])); ?></li>
         <li>Viewed: <?php echo $row['hits']; ?></li>
+        <li><?php
+            if (!empty($tags)) {
+                unset($links);
+                foreach ($tags as $tag):
+                    $links[] = anchor('book/tag/' . remove_bracket($tag['tag']) . '/' . $tag['tag_id'], $tag['tag'],'class="w3-tag"');
+                endforeach;
+                print_r(implode(' ', $links));
+            }
+            ?></li>
     </ul>
     <div class="w3-panel">
         <p style="direction: <?php echo $dir; ?>">
-<?php echo nl2br($row['description']); ?>
+            <?php echo nl2br($row['description']); ?>
         </p>
     </div>
     <table class="w3-table w3-border">
@@ -46,15 +54,15 @@
             <th>Format</th>
             <th colspan="2">Size</th>
         </tr>
-                <?php foreach ($filerow as $item): ?>
+        <?php foreach ($filerow as $item): ?>
 
             <tr>
                 <td>
-    <?php
-    $ext = pathinfo($item['file_name'], PATHINFO_EXTENSION);
-    $ext = strtoupper($ext);
-    echo $ext;
-    ?>
+                    <?php
+                    $ext = pathinfo($item['file_name'], PATHINFO_EXTENSION);
+                    $ext = strtoupper($ext);
+                    echo $ext;
+                    ?>
 
                 </td>
                 <td>
@@ -69,7 +77,7 @@
                 </td>
                 <td><?php echo anchor('book/download/' . $item['id'], 'Download', 'class="w3-button w3-hover-green w3-red"') ?></td>
             </tr>
-            <?php endforeach; ?>
+        <?php endforeach; ?>
 
     </table>
     <div class="w3-center">
@@ -84,14 +92,14 @@
                 ?>
                 <div class="w3-button w3-bar-item w3-block" style="width: 180px;">
                     <a style="text-decoration: none;" href="<?php
-                   $link2 = site_url() . 'book/details/' . $row['id'];
-                   echo $link2;
-                ?>">
+                    $link2 = site_url() . 'book/details/' . $row['id'];
+                    echo $link2;
+                    ?>">
                         <img class="w3-border" src="<?php echo base_url($link); ?>">        
                         <p><?php echo $row['title']; ?></p>
                     </a>
                 </div>
-<?php endforeach; ?>
+            <?php endforeach; ?>
         </div>
     </div>
 </div>
