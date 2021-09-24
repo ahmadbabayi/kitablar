@@ -15,4 +15,22 @@ class Author_model extends CI_Model {
         $query = $this->db->get('authors');
         return $query->result_array();
     }
+    
+    public function search_author($author) {
+        $query = $this->db->query('SELECT id FROM authors WHERE BINARY author = "'.$author.'"');
+        $row = $query->row();
+        if ($query->num_rows()>0) {
+            return $row->id;
+        } else {
+            return 0;
+        }
+    }
+    
+    public function insert_author($author) {
+        $this->author = $author;
+        $this->db->insert('authors', $this);
+        unset($this->author);
+        return $this->db->insert_id();
+    }
+    
 }

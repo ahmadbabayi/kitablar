@@ -114,14 +114,7 @@ class Admin extends CI_Controller {
         $data['row'] = $this->admin_model->show_book($id);
         $lang = $this->admin_model->show_book($id);
         $data['filerow'] = $this->admin_model->show_files($id);
-        $this->load->model('member_model');
-        $data['categorylist'] = $this->member_model->get_categories($lang['language']);
-        $selectedcat = $this->member_model->get_book_categories($id);
-        $checkedcat = array();
-        foreach ($selectedcat as $value) {
-            $checkedcat[] = $value['tag_id'];
-        }
-        $data['selectedcategory'] = $checkedcat;
+
         $this->load->view('header', $data);
         $this->load->view('admin/main');
         $this->load->view('admin/bookdetails', $data);

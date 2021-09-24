@@ -4,7 +4,7 @@ class Member extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('member_model');
+        $this->load->model(array('book_model','user_model','author_model','tag_model'));
         $this->load->helper('file');
         if (!(isset($_SESSION['username']) && $_SESSION['logged_in'] === true)) {
             redirect('user/login', 'location');
@@ -35,7 +35,7 @@ class Member extends CI_Controller {
             $this->load->view('member/addbook');
             $this->load->view('footer');
         } else {
-            $this->member_model->insert_book();
+            $this->book_model->insert_book();
             $id = $this->db->insert_id();
 
             //search & insert book authors
@@ -45,11 +45,11 @@ class Member extends CI_Controller {
             foreach ($authors as $author) {
                 $author = ucfirst(trim($author));
                 if ($author != '') {
-                    $author_id = $this->member_model->search_author($author);
+                    $author_id = $this->author_model->search_author($author);
                     if ($author_id == 0) {
-                        $author_id = $this->member_model->insert_author($author);
+                        $author_id = $this->author_model->insert_author($author);
                     }
-                    $this->member_model->insert_book_author($id, $author_id);
+                    $this->book_model->insert_book_author($id, $author_id);
                 }
             }
 
@@ -60,11 +60,11 @@ class Member extends CI_Controller {
             foreach ($tags as $tag) {
                 $tag = ucfirst(trim($tag));
                 if ($tag != '') {
-                    $tag_id = $this->member_model->search_tag($tag);
+                    $tag_id = $this->tag_model->search_tag($tag);
                     if ($tag_id == 0) {
-                        $tag_id = $this->member_model->insert_tag($tag);
+                        $tag_id = $this->tag_model->insert_tag($tag);
                     }
-                    $this->member_model->insert_book_tag($id, $tag_id);
+                    $this->book_model->insert_book_tag($id, $tag_id);
                 }
             }
 
@@ -85,16 +85,9 @@ class Member extends CI_Controller {
             $image2_path = $dir . 'coverthumb.jpg';
             create_thumb($image1_path, $image2_path, $box = 160);
 
-            $data['row'] = $this->member_model->show_book($id);
-            $data['filerow'] = $this->member_model->show_files($id);
-            $lang = $data['row'];
-            $data['categorylist'] = $this->member_model->get_categories($lang['language']);
-            $selectedcat = $this->member_model->get_book_categories($id);
-            $checkedcat = array();
-            foreach ($selectedcat as $value) {
-                $checkedcat[] = $value['category_id'];
-            }
-            $data['selectedcategory'] = $checkedcat;
+            $data['row'] = $this->book_model->get_user_book($id);
+            $data['filerow'] = $this->book_model->show_files($id);
+
             $this->load->view('header', $data);
             $this->load->view('member/main');
             $this->load->view('member/bookdetails', $data);
@@ -106,8 +99,8 @@ class Member extends CI_Controller {
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
-        $data['booklist'] = $this->member_model->get_user_books($this->session->userdata('user_id'));
-        $total_row = $this->member_model->record_count($this->session->userdata('user_id'));
+        $data['booklist'] = $this->book_model->get_user_books($this->session->userdata('user_id'));
+        $total_row = $this->book_model->user_book_record_count($this->session->userdata('user_id'));
         $data['totalrows'] = $total_row;
         $this->load->view('header', $data);
         $this->load->view('member/main');
@@ -121,11 +114,11 @@ class Member extends CI_Controller {
         $data['title'] = 'mamber area';
         $this->load->helper('number');
         $this->load->library('form_validation');
-        $data['row'] = $this->member_model->show_book($id);
+        $data['row'] = $this->book_model->get_user_book($id);
         if (!empty($data['row'])) {
             $lang = $data['row'];
-            $data['authors'] = $this->member_model->get_book_authors($id);
-            $data['filerow'] = $this->member_model->show_files($id);
+            $data['authors'] = $this->book_model->get_book_authors($id);
+            $data['filerow'] = $this->book_model->show_files($id);
             $this->load->view('header', $data);
             $this->load->view('member/bookdetails', $data);
             $this->load->view('footer');
@@ -144,9 +137,9 @@ class Member extends CI_Controller {
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
         if ($id > 0) {
-            $data['row'] = $this->member_model->show_book($id);
-            $data['authors'] = $this->member_model->get_book_authors($id);
-            $data['tags'] = $this->member_model->get_book_tags($id);
+            $data['row'] = $this->book_model->get_user_book($id);
+            $data['authors'] = $this->book_model->get_book_authors($id);
+            $data['tags'] = $this->book_model->get_book_tags($id);
             if (!empty($data['row'])) {
                 $this->load->helper(array('form', 'url'));
                 $this->load->library('form_validation');
@@ -158,7 +151,7 @@ class Member extends CI_Controller {
                     $this->load->view('member/editbook', $data);
                     $this->load->view('footer');
                 } else {
-                    $this->member_model->update_book();
+                    $this->book_model->update_book();
 
                     $authors = $this->input->post('authors');
                     $authors = explode(',', $authors);
@@ -166,11 +159,11 @@ class Member extends CI_Controller {
                     foreach ($authors as $author) {
                         $author = ucfirst(trim($author));
                         if ($author != '') {
-                            $author_id = $this->member_model->search_author($author);
+                            $author_id = $this->author_model->search_author($author);
                             if ($author_id == 0) {
-                                $author_id = $this->member_model->insert_author($author);
+                                $author_id = $this->author_model->insert_author($author);
                             }
-                            $this->member_model->insert_book_author($id, $author_id);
+                            $this->book_model->insert_book_author($id, $author_id);
                         }
                     }
 
@@ -180,11 +173,11 @@ class Member extends CI_Controller {
                     foreach ($tags as $tag) {
                         $tag = ucfirst(trim($tag));
                         if ($tag != '') {
-                            $tag_id = $this->member_model->search_tag($tag);
+                            $tag_id = $this->tag_model->search_tag($tag);
                             if ($tag_id == 0) {
-                                $tag_id = $this->member_model->insert_tag($tag);
+                                $tag_id = $this->tag_model->insert_tag($tag);
                             }
-                            $this->member_model->insert_book_tag($id, $tag_id);
+                            $this->book_model->insert_book_tag($id, $tag_id);
                         }
                     }
 
@@ -201,7 +194,7 @@ class Member extends CI_Controller {
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
         $id = $this->input->post('id');
-        $data['row'] = $this->member_model->show_book($id);
+        $data['row'] = $this->book_model->get_user_book($id);
         if (!empty($data['row'])) {
             $this->load->helper(array('form', 'url'));
             $this->load->library('form_validation');
@@ -235,7 +228,7 @@ class Member extends CI_Controller {
     public function removebook($id) {
         $id = intval($id);
         if ($id > 0) {
-            $data['row'] = $this->member_model->show_book($id);
+            $data['row'] = $this->book_model->get_user_book($id);
             if (!empty($data['row'])) {
                 if ($this->db->query('delete from books where id=' . $id)) {
                     $dir = './data/books/bk' . $id . '/';
@@ -274,14 +267,14 @@ class Member extends CI_Controller {
         } else {
             $data = array('upload_data' => $this->upload->data());
             $filename = $this->upload->data('file_name');
-            $this->member_model->insert_book_file($id, $filename);
+            $this->book_model->insert_book_file($id, $filename);
             redirect('member/bookdetails/' . $id, 'location');
         }
     }
 
     public function removefile($book_id, $id) {
-        $data['row'] = $this->member_model->show_book($book_id);
-        $item = $this->member_model->show_file($id);
+        $data['row'] = $this->book_model->get_user_book($book_id);
+        $item = $this->book_model->show_file($id);
         if (!empty($data['row'])) {
             if ($id > 0) {
                 $this->db->query('delete from book_files where id=' . $id . ' and book_id=' . $book_id);
@@ -295,7 +288,7 @@ class Member extends CI_Controller {
     public function profile() {
         $this->load->library('form_validation');
         $id = $this->input->post('id');
-        $data['row'] = $this->member_model->show_profile($this->session->userdata('user_id'));
+        $data['row'] = $this->user_model->show_profile($this->session->userdata('user_id'));
         $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]');
         $this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'required|matches[password]');
 
@@ -308,15 +301,9 @@ class Member extends CI_Controller {
             $this->load->view('member/profile', $data);
             $this->load->view('footer');
         } else {
-            $this->member_model->update_profile();
+            $this->user_model->update_profile();
             redirect('member/', 'location');
         }
-    }
-
-    public function categoryadd() {
-        $id = $this->input->post('id');
-        $this->member_model->insert_category();
-        redirect('member/bookdetails/' . $id, 'location');
     }
 
 }

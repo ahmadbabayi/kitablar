@@ -105,7 +105,7 @@ class Book extends CI_Controller {
         $data['title'] = 'search page';
 
         //author book list
-        $ids = $this->book_model->get_book_authors($id);
+        $ids = $this->book_model->get_book_authors_ids($id);
         if (!empty($ids)) {
             foreach ($ids as $value) {
                 $bookids[] = $value['book_id'];
@@ -132,7 +132,7 @@ class Book extends CI_Controller {
         $data['title'] = 'search page';
 
         //author book list
-        $ids = $this->book_model->get_book_tags($id);
+        $ids = $this->book_model->get_book_tags_ids($id);
         if (!empty($ids)) {
             foreach ($ids as $value) {
                 $bookids[] = $value['book_id'];
@@ -159,8 +159,8 @@ class Book extends CI_Controller {
         $this->lang->load('dil', 'english');
         $ip = $this->input->ip_address();
         $this->session->set_userdata('downloadtoken', $ip);
-        $data['authors'] = $this->book_model->get_authors($id);
-        $data['tags'] = $this->book_model->get_tags($id);
+        $data['authors'] = $this->book_model->get_book_authors($id);
+        $data['tags'] = $this->book_model->get_book_tags($id);
         $metadata = $this->book_model->show_book($id);
         if (!empty($metadata)) {
             $data['row'] = $metadata;

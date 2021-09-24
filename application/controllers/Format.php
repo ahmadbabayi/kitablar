@@ -19,7 +19,7 @@ class Format extends CI_Controller {
     }
 
     public function index() {
-        $data['authorlist'] = $this->book_model->show_formats();
+        $data['formatlist'] = $this->book_model->show_formats();
         $data['description'] = 'E-book format pdf epub doc text';
         $data['keywords'] = 'pdf, epub, word, doc, txt';
         $data['title'] = 'Format list';
