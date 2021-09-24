@@ -53,13 +53,13 @@ class User_model extends CI_Model {
 
         return password_verify($password, $hash);
     }
-    
+
     public function show_profile($id) {
 
         $query = $this->db->get_where('users', array('id' => $id));
         return $query->row_array();
     }
-    
+
     public function update_profile() {
 
         $this->email = $this->input->post('email');
