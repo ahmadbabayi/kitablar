@@ -100,7 +100,7 @@ class Member_model extends CI_Model {
         $this->db->update('users', $this, array('id' => $id));
     }
     
-    public function get_authors($id) {
+    public function get_book_authors($id) {
         $this->db->select('book_author.author_id,authors.author');
         $this->db->where('book_id',$id);
         $this->db->from('book_author');
@@ -158,5 +158,39 @@ class Member_model extends CI_Model {
         $this->db->where('book_id',$id);
         $query = $this->db->get('book_tag');
         return $query->result_array();
+    }
+    
+    public function get_book_tags($id) {
+        $this->db->select('book_tag.tag_id,tags.tag');
+        $this->db->where('book_id',$id);
+        $this->db->from('book_tag');
+        $this->db->join('tags', 'tags.id = book_tag.tag_id', 'left');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    public function search_tag($tag) {
+        $query = $this->db->query('SELECT id FROM tags WHERE BINARY tag = "'.$tag.'"');
+        $row = $query->row();
+        if ($query->num_rows()>0) {
+            return $row->id;
+        } else {
+            return 0;
+        }
+    }
+    
+    public function insert_book_tag($id,$tag_id) {
+        $this->book_id = $id;
+        $this->tag_id = $tag_id;
+        $this->db->insert('book_tag', $this);
+        unset($this->book_id);
+        unset($this->tag_id);
+    }
+    
+    public function insert_tag($tag) {
+        $this->tag = $tag;
+        $this->db->insert('tags', $this);
+        unset($this->tag);
+        return $this->db->insert_id();
     }
 }

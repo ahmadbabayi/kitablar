@@ -32,22 +32,24 @@
             }
             ?></li>
         <li>ISBN: <?php echo $row['isbn']; ?></li>
-        <li>Language: <?php echo anchor('book/language/' . $row['language'], $this->lang->line('l' . $row['language'])); ?></li>
+        <li>Language: <?php echo anchor('book/language/' . $this->lang->line('l' . $row['language']) . '/' . $row['language'], $this->lang->line('l' . $row['language'])); ?></li>
         <li>Viewed: <?php echo $row['hits']; ?></li>
-        <li><?php
-            if (!empty($tags)) {
-                unset($links);
-                foreach ($tags as $tag):
-                    $links[] = anchor('book/tag/' . remove_bracket($tag['tag']) . '/' . $tag['tag_id'], $tag['tag'],'class="w3-tag"');
-                endforeach;
-                print_r(implode(' ', $links));
-            }
-            ?></li>
     </ul>
     <div class="w3-panel">
         <p style="direction: <?php echo $dir; ?>">
             <?php echo nl2br($row['description']); ?>
         </p>
+    </div>
+    <div>
+        <?php
+        if (!empty($tags)) {
+            unset($links);
+            foreach ($tags as $tag):
+                $links[] = anchor('book/tag/' . remove_bracket($tag['tag']) . '/' . $tag['tag_id'], $tag['tag'], 'class="w3-tag"');
+            endforeach;
+            print_r(implode(' ', $links));
+        }
+        ?>
     </div>
     <table class="w3-table w3-border">
         <tr class="w3-green">

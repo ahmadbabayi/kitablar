@@ -36,35 +36,21 @@
                 <td>description: </td><td><?php echo $row['description']; ?></td>
             </tr>
         </table>
-        <div>
-            <?php echo form_open('member/categoryadd/'); ?>
-            <label>Select category</label><br>
-            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-            <?php foreach ($categorylist as $value): ?>
-                <input type="checkbox" name="tags[]" value="<?php echo $value['id']; ?>" <?php
-                if (in_array($value['id'], $selectedcategory)) {
-                    echo 'checked';
-                }
-                ?>>
-                <?php echo $value['tag']; ?><br>
-            <?php endforeach; ?>
-            <input type="submit" value="Submit">
-            </form>
-        </div>
         <div id="loadergif"><img alt="upload" src="<?php echo base_url('images/upload.gif'); ?>"></div>
-        <div>
+        <div class="w3-padding w3-margin w3-gray">
             <?php echo form_open_multipart('member/changecover'); ?>
             <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
             <label>Change E-book cover image!</label><br />
-            <input type="file" name="cover" onchange="form.submit();" />
+            <input  class="w3-input w3-border" type="file" name="cover" onchange="form.submit();" />
             <p>Allowed type: jpg</p>
             </form>
         </div>
-        <div>
+
+        <div class="w3-padding w3-margin w3-gray">
             <?php echo form_open_multipart('member/bookfileuploading'); ?>
             <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
             <label>Select an E-book file for uploading!</label><br />
-            <input type="file" name="bookfile" onchange="form.submit(), showuploadgif()" />
+            <input  class="w3-input w3-border" type="file" name="bookfile" onchange="form.submit(), showuploadgif()" />
             <p>Allowed type: zip,pdf,doc,docx,epub,txt,odt</p>
             </form>
         </div>

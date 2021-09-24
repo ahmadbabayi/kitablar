@@ -60,6 +60,7 @@ class Book extends CI_Controller {
 
     public function language() {
         $lang = intval($this->uri->segment(4, 0));
+        $langtext = $this->uri->segment(3, 0);
         if ($lang < 1 || $lang > 5) {
             redirect('book', 'location');
         }
@@ -69,10 +70,10 @@ class Book extends CI_Controller {
             //change pagination method
             $total_row = $this->book_model->record_language_count($lang);
             $config['total_rows'] = $total_row;
-            $config['base_url'] = site_url() . '/book/language/' . $lang;
+            $config['base_url'] = site_url() . '/book/language/'. $langtext.'/'.$lang;
             $this->pagination->initialize($config);
 
-            $start = $this->uri->segment(4, 0);
+            $start = $this->uri->segment(5, 0);
             $limit = $this->config->item('per_page');
             $data['booklist'] = $this->book_model->fetch_language_records($limit, $start, $lang);
             $data['pagination'] = $this->pagination->create_links();
@@ -126,8 +127,8 @@ class Book extends CI_Controller {
         if ($id == 0) {
             redirect('book', 'location');
         }
-        $data['description'] = '';
-        $data['keywords'] = '';
+        $data['description'] = urldecode($this->uri->segment(3, 0));
+        $data['keywords'] = 'kitab, tag, mövzu, category, book, '.urldecode($this->uri->segment(3, 0));
         $data['title'] = 'search page';
 
         //author book list

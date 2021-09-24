@@ -38,16 +38,33 @@ class Member extends CI_Controller {
             $this->member_model->insert_book();
             $id = $this->db->insert_id();
 
-            $authors = $this->member_model->get_book_authors($id);
+            //search & insert book authors
+            $authors = $this->input->post('authors');
             $authors = explode(',', $authors);
             $this->db->query('delete from book_author where book_id=' . $id);
             foreach ($authors as $author) {
+                $author = ucfirst(trim($author));
                 if ($author != '') {
                     $author_id = $this->member_model->search_author($author);
                     if ($author_id == 0) {
                         $author_id = $this->member_model->insert_author($author);
                     }
                     $this->member_model->insert_book_author($id, $author_id);
+                }
+            }
+
+            //search & insert book tags
+            $tags = $this->input->post('tags');
+            $tags = explode(',', $tags);
+            $this->db->query('delete from book_tag where book_id=' . $id);
+            foreach ($tags as $tag) {
+                $tag = ucfirst(trim($tag));
+                if ($tag != '') {
+                    $tag_id = $this->member_model->search_tag($tag);
+                    if ($tag_id == 0) {
+                        $tag_id = $this->member_model->insert_tag($tag);
+                    }
+                    $this->member_model->insert_book_tag($id, $tag_id);
                 }
             }
 
@@ -107,15 +124,8 @@ class Member extends CI_Controller {
         $data['row'] = $this->member_model->show_book($id);
         if (!empty($data['row'])) {
             $lang = $data['row'];
-            $data['authors'] = $this->member_model->get_authors($id);
+            $data['authors'] = $this->member_model->get_book_authors($id);
             $data['filerow'] = $this->member_model->show_files($id);
-            $data['categorylist'] = $this->member_model->get_categories($lang['language']);
-            $selectedcat = $this->member_model->get_book_categories($id);
-            $checkedcat = array();
-            foreach ($selectedcat as $value) {
-                $checkedcat[] = $value['tag_id'];
-            }
-            $data['selectedcategory'] = $checkedcat;
             $this->load->view('header', $data);
             $this->load->view('member/bookdetails', $data);
             $this->load->view('footer');
@@ -135,7 +145,8 @@ class Member extends CI_Controller {
         $data['title'] = 'mamber area';
         if ($id > 0) {
             $data['row'] = $this->member_model->show_book($id);
-            $data['authors'] = $this->member_model->get_authors($id);
+            $data['authors'] = $this->member_model->get_book_authors($id);
+            $data['tags'] = $this->member_model->get_book_tags($id);
             if (!empty($data['row'])) {
                 $this->load->helper(array('form', 'url'));
                 $this->load->library('form_validation');
@@ -160,6 +171,20 @@ class Member extends CI_Controller {
                                 $author_id = $this->member_model->insert_author($author);
                             }
                             $this->member_model->insert_book_author($id, $author_id);
+                        }
+                    }
+
+                    $tags = $this->input->post('tags');
+                    $tags = explode(',', $tags);
+                    $this->db->query('delete from book_tag where book_id=' . $id);
+                    foreach ($tags as $tag) {
+                        $tag = ucfirst(trim($tag));
+                        if ($tag != '') {
+                            $tag_id = $this->member_model->search_tag($tag);
+                            if ($tag_id == 0) {
+                                $tag_id = $this->member_model->insert_tag($tag);
+                            }
+                            $this->member_model->insert_book_tag($id, $tag_id);
                         }
                     }
 
