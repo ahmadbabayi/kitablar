@@ -108,6 +108,9 @@ function format_descriptions($param) {
         case 'jar':
             $text = 'Jar mobile application format book list';
             break;
+        default:
+            $text = 'Other format';
+            break;
     }
     return $text;
 }

@@ -36,6 +36,15 @@ class Test_model extends CI_Model {
         return $query->result_array();
     }
     
+    public function show_books4() {
+        $this->db->select('books.*,book_author.author_id');
+        $this->db->from('books');
+        $this->db->join('book_author', 'books.id = book_author.author_id', 'left');
+        $this->db->order_by('books.id', 'ASC');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
     public function get_authors() {
         $query = $this->db->get('authors');
         return $query->result_array();
@@ -43,6 +52,21 @@ class Test_model extends CI_Model {
     
     public function search_author($id) {
         $query = $this->db->query('SELECT book_id FROM book_author WHERE author_id = "'.$id.'"');
+        $row = $query->row();
+        if ($query->num_rows()>0) {
+            return $row->book_id;
+        } else {
+            return 0;
+        }
+    }
+    
+    public function get_tags() {
+        $query = $this->db->get('tags');
+        return $query->result_array();
+    }
+    
+    public function search_tag($id) {
+        $query = $this->db->query('SELECT book_id FROM book_tag WHERE tag_id = "'.$id.'"');
         $row = $query->row();
         if ($query->num_rows()>0) {
             return $row->book_id;

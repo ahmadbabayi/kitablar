@@ -114,6 +114,22 @@ class Test extends CI_Controller {
         }
     }
 
+    public function pdfinfo() {
+
+        include 'vendor/autoload.php';
+        $parser = new \Smalot\PdfParser\Parser();
+        $pdf = $parser->parseFile('data/books/bk1398/output.pdf');
+        $details = $pdf->getDetails();
+
+        // Loop over each property to extract values (string or array).
+        foreach ($details as $property => $value) {
+            if (is_array($value)) {
+                $value = implode(', ', $value);
+            }
+            echo $property . ' => ' . $value . "<br>";
+        }
+    }
+
     public function cleanfiles() {
         $filelist = $this->test_model->show_books3();
         foreach ($filelist as $row) {
@@ -181,6 +197,18 @@ class Test extends CI_Controller {
         }
     }
 
+    public function updatekeywords() {
+        $list = $this->test_model->get_books();
+        foreach ($list as $row) {
+            $string = $row['title'];
+            if ($string != '') {
+                $string = str_replace(' ', ', ', $string);
+                echo $string . '<br>';
+                $this->db->query('UPDATE `books` SET `keywords`="' . $string . '" WHERE id=' . $row['id']);
+            }
+        }
+    }
+
     public function upstr() {
         $filelist = $this->test_model->get_books();
         foreach ($filelist as $row) {
@@ -208,6 +236,17 @@ class Test extends CI_Controller {
             if ($author_id == 0) {
                 echo $value['author'] . '<br>';
                 $this->db->query('delete from authors where id=' . $value['id']);
+            }
+        }
+    }
+
+    public function cleantags() {
+        $list = $this->test_model->get_tags();
+        foreach ($list as $value) {
+            $tag_id = $this->test_model->search_tag($value['id']);
+            if ($tag_id == 0) {
+                echo $value['tag'] . '<br>';
+                $this->db->query('delete from tags where id=' . $value['id']);
             }
         }
     }

@@ -265,9 +265,8 @@ class Member extends CI_Controller {
             $this->load->view('member/uploadfileerror', $error);
             $this->load->view('footer');
         } else {
-            $data = array('upload_data' => $this->upload->data());
             $filename = $this->upload->data('file_name');
-            $this->book_model->insert_book_file($id, $filename);
+            $this->book_model->insert_book_file($id, $filename,$this->upload->data('file_ext'));
             redirect('member/bookdetails/' . $id, 'location');
         }
     }

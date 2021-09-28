@@ -29,5 +29,6 @@ function get_num_of_words($string) {
 function remove_bracket($str) {
     $str = str_replace('(', '', $str);
     $str = str_replace(')', '', $str);
+    $str = str_replace('&', ' - ', $str);
     return $str;
 }

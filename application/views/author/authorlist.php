@@ -9,6 +9,7 @@
 <div class="w3-container w3-bar">
     <?php
     foreach ($authorlist as $author):
-        echo anchor('book/author/'. remove_bracket($author['author']).'/'.$author['id'], $author['author'],'class="w3-tag  w3-large w3-orange w3-margin w3-padding"');
-        endforeach; ?>
+        echo anchor('book/author/' . remove_bracket($author['author']) . '/' . $author['id'], $author['author'], 'class="w3-tag  w3-large w3-orange w3-margin w3-padding"');
+    endforeach;
+    ?>
 </div>

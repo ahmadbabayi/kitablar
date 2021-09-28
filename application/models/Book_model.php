@@ -179,9 +179,10 @@ class Book_model extends CI_Model {
         unset($this->date);
     }
 
-    public function insert_book_file($id, $filename) {
+    public function insert_book_file($id, $filename,$format) {
         $this->book_id = $id;
         $this->file_name = $filename;
+        $this->format = str_replace('.', '', $format);
         $this->date = time();
 
         $this->db->insert('book_files', $this);

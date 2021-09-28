@@ -9,8 +9,6 @@ class Author extends CI_Controller {
     }
 
     public function index() {
-        $start = $this->uri->segment(3, 0);
-        $limit = $this->config->item('per_page');
         $data['authorlist'] = $this->author_model->show_authors();
         $total_row = $this->author_model->record_count();
         $data['totalrows'] = $total_row;
