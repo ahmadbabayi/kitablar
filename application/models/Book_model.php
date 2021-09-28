@@ -44,9 +44,27 @@ class Book_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    public function show_format_books($format) {
+        $this->db->select('book_files.book_id,book_files.format,books.*');
+        $this->db->from('book_files');
+        $this->db->where('books.active', 1);
+        $this->db->where('book_files.format', $format);
+        $this->db->order_by('books.id', 'DESC');
+        $this->db->join('books', 'books.id = book_files.book_id', 'left');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 
     public function fetch_records($limit, $start) {
         $this->db->limit($limit, $start);
+        $this->db->where('active', 1);
+        $this->db->order_by('id', 'DESC');
+        $query = $this->db->get('books');
+        return $query->result_array();
+    }
+    
+    public function show_books() {
         $this->db->where('active', 1);
         $this->db->order_by('id', 'DESC');
         $query = $this->db->get('books');
@@ -59,6 +77,15 @@ class Book_model extends CI_Model {
         $this->db->where('language', $lang);
         $this->db->order_by('id', 'DESC');
         $this->db->limit($limit, $start);
+        $query = $this->db->get('books');
+        return $query->result_array();
+    }
+    
+    public function show_language_books($lang) {
+
+        $this->db->where('active', 1);
+        $this->db->where('language', $lang);
+        $this->db->order_by('id', 'DESC');
         $query = $this->db->get('books');
         return $query->result_array();
     }

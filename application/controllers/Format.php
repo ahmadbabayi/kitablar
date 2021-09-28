@@ -24,7 +24,7 @@ class Format extends CI_Controller {
         $data['keywords'] = 'pdf, epub, word, doc, txt';
         $data['title'] = 'Format list';
         $this->load->view('header', $data);
-        $this->load->view('format/format');
+        $this->load->view('format/format', $data);
         $this->load->view('footer');
     }
 

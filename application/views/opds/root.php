@@ -47,7 +47,7 @@
     <entry>
         <title>All books</title>
         <updated>2021-01-10T10:02:00Z</updated>
-        <id>urn:uuid:d49e8018-a0e0-499e-9423-7c175fa0c59c</id>
+        <id>urn:uuid:d49e8018-a0e0-499e-9423-7c175fa0c59d</id>
         <content type="text">Alphabetical index of the books.</content>
         <link rel="<?php echo base_url(); ?>" href="opds/book" type="application/atom+xml;profile=opds-catalog;kind=navigation"/>
         <link href="images/allbook.png" type="image/png" rel="http://opds-spec.org/image/thumbnail"/>

@@ -14,16 +14,16 @@ function arab2farsi($str) {
 function upstr($str) {
     $len = get_num_of_words($str);
     if ($len == 2) {
-        $str = ucwords( $str, " ") ;
+        $str = ucwords($str, " ");
         return $str;
     }
     return $str;
 }
 
 function get_num_of_words($string) {
-      $string = preg_replace('/\s+/', ' ', trim($string));
-      $words = explode(" ", $string);
-      return count($words);
+    $string = preg_replace('/\s+/', ' ', trim($string));
+    $words = explode(" ", $string);
+    return count($words);
 }
 
 function remove_bracket($str) {
@@ -31,4 +31,9 @@ function remove_bracket($str) {
     $str = str_replace(')', '', $str);
     $str = str_replace('&', ' - ', $str);
     return $str;
+}
+
+function getuid($string) {
+    $hash = md5($string);
+    return substr($hash, 0, 8) . '-' . substr($hash, 8, 4) . '-' . substr($hash, 12, 4) . '-' . substr($hash, 16, 4) . '-' . substr($hash, 20, 12);
 }
