@@ -4,7 +4,7 @@ class Search extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('search_model');
+        $this->load->model('book_model');
         $this->load->library('form_validation');
 
     }
@@ -15,8 +15,8 @@ class Search extends CI_Controller {
         $data['title'] = 'search page';
 
         $this->load->view('header', $data);
-        if ($this->search_model->search_records()) {
-            $data['booklist'] = $this->search_model->search_records();
+        if ($this->book_model->search_records()) {
+            $data['booklist'] = $this->book_model->search_records();
             $this->load->view('search/booklist', $data);
         } else {
             $this->load->view('search/searchform');
