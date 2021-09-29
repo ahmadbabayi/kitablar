@@ -4,7 +4,7 @@ class Test extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('test_model');
+        $this->load->model(array('book_model', 'user_model', 'author_model', 'test_model'));
         $this->load->helper('str_helper');
     }
 
@@ -176,6 +176,42 @@ class Test extends CI_Controller {
         }
     }
 
+    public function authorkeyword() {
+        $array = $this->test_model->get_books();
+        foreach ($array as $value) {
+            $authors = $this->book_model->get_book_authors($value['id']);
+            //echo $value['id'].'---'.$value['title'].'--------------';
+            $links = array();
+            //----------------------------------------------
+            foreach ($authors as $author) {
+                //echo $author['author'].'<br>';
+                $links[] = $author['author'];
+            }
+            //----------------------------------------------
+            $str = $value['keywords'] . ', ' . implode(', ', $links);
+            echo $value['id'] . '---' . $str . '<br>';
+            $this->db->query('UPDATE `books` SET `keywords`="' . $str . '" WHERE id=' . $value['id']);
+        }
+    }
+    
+    public function tagkeyword() {
+        $array = $this->test_model->get_books();
+        foreach ($array as $value) {
+            $tags = $this->book_model->get_book_tags($value['id']);
+            //echo $value['id'].'---'.$value['title'].'--------------';
+            $links = array();
+            //----------------------------------------------
+            foreach ($tags as $tag) {
+                //echo $tag['tag'].'<br>';
+                $links[] = strtolower($tag['tag']);
+            }
+            //----------------------------------------------
+            $str = $value['keywords'] . ', ' . implode(', ', $links);
+            echo $value['id'] . '---' . $str . '<br>';
+            $this->db->query('UPDATE `books` SET `keywords`="' . $str . '" WHERE id=' . $value['id']);
+        }
+    }
+
     public function updateauthors() {
         $list = $this->test_model->get_books();
         foreach ($list as $row) {
@@ -248,6 +284,21 @@ class Test extends CI_Controller {
                 echo $value['tag'] . '<br>';
                 $this->db->query('delete from tags where id=' . $value['id']);
             }
+        }
+    }
+    
+    public function cleankeywords() {
+        $array = $this->test_model->get_books();
+        foreach ($array as $value) {
+            $str = trim($value['keywords']);
+            $str = rtrim($str, ',');
+            $str = str_replace(', ,', '', $str);
+            $str = str_replace(', və, ', ', ', $str);
+            $str = str_replace(', و, ', ', ', $str);
+            $str = str_replace(', -, ', ', ', $str);
+            $str = str_replace(', -, ', ', ', $str);
+            echo $value['id'] . '---' . $str . '<br>';
+            $this->db->query('UPDATE `books` SET `keywords`="' . $str . '" WHERE id=' . $value['id']);
         }
     }
 
