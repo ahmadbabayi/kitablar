@@ -139,4 +139,25 @@ class Opds extends CI_Controller {
         }
     }
 
+    public function search() {
+      
+        
+        if ($this->uri->segment(3, 0) == '') {
+            $data['list'] = 1;
+            $string = $this->load->view('opds/search', $data, TRUE);
+            $this->output->set_content_type('application/xml')->set_output($string);
+        } else {
+            $id = $this->uri->segment(3, 0);
+            $data['id'] = $id;
+            $data['list'] = $this->book_model->search_opds($id);
+            if (!empty($data['list'])) {
+
+                $string = $this->load->view('opds/searchlist', $data, TRUE);
+                $this->output->set_content_type('application/xml')->set_output($string);
+            } else {
+                show_404();
+            }
+        }
+    }
+
 }

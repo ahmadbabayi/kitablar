@@ -8,9 +8,9 @@
         <name>Ahmad Babayi</name>
         <uri>http://kitablar.com</uri>
     </author>
-    <link href="feed.php" type="application/atom+xml;profile=opds-catalog;kind=navigation" rel="start" title="Home"/>
-    <link href="feed.php?" type="application/atom+xml;profile=opds-catalog;kind=navigation" rel="self"/>
-    <link href="feed.php?page=8" type="application/opensearchdescription+xml" rel="search" title="Search here"/>
+    <link href="<?php echo base_url('opds'); ?>" type="application/atom+xml;profile=opds-catalog;kind=navigation" rel="start" title="Home"/>
+    <link href="<?php echo base_url('opds'); ?>" type="application/atom+xml;profile=opds-catalog;kind=navigation" rel="self"/>
+    <link href="<?php echo base_url('opds/search'); ?>" type="application/opensearchdescription+xml" rel="search" title="Search here"/>
 
     <entry>
         <title>Authors</title>

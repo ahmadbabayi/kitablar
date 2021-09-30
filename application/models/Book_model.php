@@ -18,6 +18,18 @@ class Book_model extends CI_Model {
             return $query->result_array();
         }
     }
+    
+    public function search_opds($search) {
+        if (strlen($search) > 2) {
+            $this->db->select('*');
+            $this->db->from('books');
+            $this->db->like('keywords', $search);
+            $this->db->where('active', 1);
+            $this->db->order_by('id', 'DESC');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+    }
 
     public function record_count() {
         $this->db->where('active', 1);
