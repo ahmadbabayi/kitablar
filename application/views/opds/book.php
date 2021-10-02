@@ -24,7 +24,7 @@
     echo '        <title>' . remove_bracket($value['title']) . '</title>' . "\n";
     echo '        <updated>2021-09-27T18:12:32+02:00</updated>' . "\n";
     echo '        <id>urn:uuid:'. getuid('kitablar:book:'.$value['id']).'</id>' . "\n";
-    echo '        <content type="text/html">' . remove_bracket($value['description']) . '</content>' . "\n";
+    echo '        <content type="text/html">' . strip_tags(remove_bracket($value['description'])) . '</content>' . "\n";
     echo '        <link rel="http://opds-spec.org/image" href="' . base_url($link) . '" type="image/jpeg" />' . "\n";
     echo '        <link rel="http://opds-spec.org/image/thumbnail" href="' . base_url($link2) . '" type="image/jpeg" />' . "\n";
     echo '        <link rel="self" href="'.base_url('opds/book/' . $value['id']).'" type="application/atom+xml;type=entry;profile=opds-catalog"/>' . "\n";
