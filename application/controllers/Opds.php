@@ -149,7 +149,7 @@ class Opds extends CI_Controller {
         } else {
             $id = $this->uri->segment(3, 0);
             $data['id'] = $id;
-            $data['list'] = $this->book_model->search_opds($id);
+            $data['list'] = $this->book_model->search_opds(urldecode($id));
             if (!empty($data['list'])) {
 
                 $string = $this->load->view('opds/searchlist', $data, TRUE);

@@ -5,6 +5,6 @@
 <InputEncoding>UTF-8</InputEncoding>
 <OutputEncoding>UTF-8</OutputEncoding>
 <Image type="image/x-icon" width="16" height="16">favicon.ico</Image>
-<Url type="application/atom+xml;profile=opds-catalog;kind=acquisition" template="<?php echo base_url('opds/search/'); ?>{searchTerms}" />
+<Url type="application/atom+xml" template="<?php echo base_url('opds/search/{searchTerms}'); ?>" />
 <Query role="example" searchTerms="robot"/>
 </OpenSearchDescription>

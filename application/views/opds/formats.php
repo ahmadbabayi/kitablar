@@ -3,10 +3,9 @@
     <title>Formats</title>
     <id>kitablar:formats:</id>
     <updated>2021-09-27T17:34:34+02:00</updated>
-    <icon>favicon.ico</icon>
     <author>
         <name>ahmadbabayi</name>
-        <uri>http://kitablar.com</uri>
+        <uri><?php echo base_url(); ?></uri>
     </author>
 
     <link href="<?php echo base_url('opds'); ?>" type="application/atom+xml;profile=opds-catalog;kind=navigation" rel="start" title="Home"/>
