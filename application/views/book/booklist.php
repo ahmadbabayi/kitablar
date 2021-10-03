@@ -22,7 +22,7 @@
         $link2 = site_url() . 'book/details/' . $row['id'];
         echo $link2;
         ?>">
-            <img class="w3-border" src="<?php echo base_url($link); ?>"><br>
+            <img class="w3-border" src="<?php echo base_url($link); ?>" alt="<?php echo $row['title']; ?>"><br>
             <?php echo $row['title']; ?>
         </a>
     <?php endforeach; ?>
