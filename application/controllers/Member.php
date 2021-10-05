@@ -4,8 +4,9 @@ class Member extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model(array('book_model','user_model','author_model','tag_model'));
-        $this->load->helper('file');
+        $this->load->model(array('book_model', 'user_model', 'author_model', 'tag_model'));
+        $this->load->helper(array('form', 'url', 'str_helper', 'file', 'thumb_helper', 'number'));
+        $this->load->library('form_validation');
         if (!(isset($_SESSION['username']) && $_SESSION['logged_in'] === true)) {
             redirect('user/login', 'location');
         }
@@ -24,7 +25,6 @@ class Member extends CI_Controller {
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
-        $this->load->helper(array('form', 'url', 'str_helper'));
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('title', 'Title', 'required');
@@ -39,34 +39,11 @@ class Member extends CI_Controller {
             $id = $this->db->insert_id();
 
             //search & insert book authors
-            $authors = $this->input->post('authors');
-            $authors = explode(',', $authors);
-            $this->db->query('delete from book_author where book_id=' . $id);
-            foreach ($authors as $author) {
-                $author = ucfirst(trim($author));
-                if ($author != '') {
-                    $author_id = $this->author_model->search_author($author);
-                    if ($author_id == 0) {
-                        $author_id = $this->author_model->insert_author($author);
-                    }
-                    $this->book_model->insert_book_author($id, $author_id);
-                }
-            }
-
+            $this->insertauthors($id);
             //search & insert book tags
-            $tags = $this->input->post('tags');
-            $tags = explode(',', $tags);
-            $this->db->query('delete from book_tag where book_id=' . $id);
-            foreach ($tags as $tag) {
-                $tag = ucfirst(trim($tag));
-                if ($tag != '') {
-                    $tag_id = $this->tag_model->search_tag($tag);
-                    if ($tag_id == 0) {
-                        $tag_id = $this->tag_model->insert_tag($tag);
-                    }
-                    $this->book_model->insert_book_tag($id, $tag_id);
-                }
-            }
+            $this->inserttags($id);
+            $this->cleanauthors();
+            $this->cleantags();
 
             $dir = './data/books/bk' . $id . '/';
             mkdir($dir);
@@ -79,7 +56,6 @@ class Member extends CI_Controller {
             $this->upload->do_upload('cover');
 
             //creat thumbnail of cover
-            $this->load->helper('thumb_helper');
             $image1_path = $dir . 'cover.jpg';
             branding($image1_path);
             $image2_path = $dir . 'coverthumb.jpg';
@@ -92,6 +68,46 @@ class Member extends CI_Controller {
             $this->load->view('member/main');
             $this->load->view('member/bookdetails', $data);
             $this->load->view('footer');
+        }
+    }
+
+    public function editbook() {
+        if ($this->uri->segment(3, 0) == '') {
+            $id = intval($this->input->post('id'));
+        } else {
+            $id = $this->uri->segment(3, 0);
+        }
+        $data['description'] = '';
+        $data['keywords'] = '';
+        $data['title'] = 'mamber area';
+        if ($id > 0) {
+            $data['row'] = $this->book_model->get_user_book($id);
+            $data['authors'] = $this->book_model->get_book_authors($id);
+            $data['tags'] = $this->book_model->get_book_tags($id);
+            if (!empty($data['row'])) {
+
+
+                $this->form_validation->set_rules('title', 'Title', 'required');
+
+                if ($this->form_validation->run() == FALSE) {
+                    $this->load->view('header', $data);
+                    $this->load->view('member/editbook', $data);
+                    $this->load->view('footer');
+                } else {
+                    $this->book_model->update_book();
+
+                    //search & insert book authors
+                    $this->insertauthors($id);
+                    //search & insert book tags
+                    $this->inserttags($id);
+                    $this->cleanauthors();
+                    $this->cleantags();
+
+                    redirect('book/details/' . $id . '/' . $id, 'location');
+                }
+            } else {
+                show_404();
+            }
         }
     }
 
@@ -112,7 +128,6 @@ class Member extends CI_Controller {
         $data['description'] = '';
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
-        $this->load->helper('number');
         $this->load->library('form_validation');
         $data['row'] = $this->book_model->get_user_book($id);
         if (!empty($data['row'])) {
@@ -127,68 +142,6 @@ class Member extends CI_Controller {
         }
     }
 
-    public function editbook() {
-        if ($this->uri->segment(3, 0) == '') {
-            $id = intval($this->input->post('id'));
-        } else {
-            $id = $this->uri->segment(3, 0);
-        }
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'mamber area';
-        if ($id > 0) {
-            $data['row'] = $this->book_model->get_user_book($id);
-            $data['authors'] = $this->book_model->get_book_authors($id);
-            $data['tags'] = $this->book_model->get_book_tags($id);
-            if (!empty($data['row'])) {
-                $this->load->helper(array('form', 'url'));
-                $this->load->library('form_validation');
-
-                $this->form_validation->set_rules('title', 'Title', 'required');
-
-                if ($this->form_validation->run() == FALSE) {
-                    $this->load->view('header', $data);
-                    $this->load->view('member/editbook', $data);
-                    $this->load->view('footer');
-                } else {
-                    $this->book_model->update_book();
-
-                    $authors = $this->input->post('authors');
-                    $authors = explode(',', $authors);
-                    $this->db->query('delete from book_author where book_id=' . $id);
-                    foreach ($authors as $author) {
-                        $author = ucfirst(trim($author));
-                        if ($author != '') {
-                            $author_id = $this->author_model->search_author($author);
-                            if ($author_id == 0) {
-                                $author_id = $this->author_model->insert_author($author);
-                            }
-                            $this->book_model->insert_book_author($id, $author_id);
-                        }
-                    }
-
-                    $tags = $this->input->post('tags');
-                    $tags = explode(',', $tags);
-                    $this->db->query('delete from book_tag where book_id=' . $id);
-                    foreach ($tags as $tag) {
-                        $tag = ucfirst(trim($tag));
-                        if ($tag != '') {
-                            $tag_id = $this->tag_model->search_tag($tag);
-                            if ($tag_id == 0) {
-                                $tag_id = $this->tag_model->insert_tag($tag);
-                            }
-                            $this->book_model->insert_book_tag($id, $tag_id);
-                        }
-                    }
-
-                    redirect('book/details/'.$id.'/'.$id, 'location');
-                }
-            } else {
-                show_404();
-            }
-        }
-    }
-
     public function changecover() {
         $data['description'] = '';
         $data['keywords'] = '';
@@ -196,8 +149,6 @@ class Member extends CI_Controller {
         $id = $this->input->post('id');
         $data['row'] = $this->book_model->get_user_book($id);
         if (!empty($data['row'])) {
-            $this->load->helper(array('form', 'url'));
-            $this->load->library('form_validation');
 
             $dir = './data/books/bk' . $id . '/';
             $config['upload_path'] = $dir;
@@ -215,7 +166,6 @@ class Member extends CI_Controller {
             } else {
                 $data = array('upload_data' => $this->upload->data());
                 //creat thumbnail of cover
-                $this->load->helper('thumb_helper');
                 $image1_path = $dir . 'cover.jpg';
                 branding($image1_path);
                 $image2_path = $dir . 'coverthumb.jpg';
@@ -234,6 +184,8 @@ class Member extends CI_Controller {
                     $dir = './data/books/bk' . $id . '/';
                     $dir2 = './data/trash/bk' . $id . '/';
                     rename($dir, $dir2);
+                    $this->cleanauthors();
+                    $this->cleantags();
                 }
             } else {
                 show_404();
@@ -247,9 +199,6 @@ class Member extends CI_Controller {
         $data['keywords'] = '';
         $data['title'] = 'mamber area';
         $id = $this->input->post('id');
-
-        $this->load->helper(array('form', 'url'));
-        $this->load->library('form_validation');
 
         $config['upload_path'] = './data/books/bk' . $id . '/';
         $config['file_name'] = 'f' . $id;
@@ -266,7 +215,7 @@ class Member extends CI_Controller {
             $this->load->view('footer');
         } else {
             $filename = $this->upload->data('file_name');
-            $this->book_model->insert_book_file($id, $filename,$this->upload->data('file_ext'));
+            $this->book_model->insert_book_file($id, $filename, $this->upload->data('file_ext'));
             redirect('member/bookdetails/' . $id, 'location');
         }
     }
@@ -302,6 +251,62 @@ class Member extends CI_Controller {
         } else {
             $this->user_model->update_profile();
             redirect('member/', 'location');
+        }
+    }
+    
+    //--------------------------------------------------------------------------------------
+    //private functions
+    private function cleanauthors() {
+        $list = $this->author_model->show_authors();
+        foreach ($list as $value) {
+            $author_id = $this->author_model->search_author_by_id($value['id']);
+            if ($author_id == 0) {
+                echo $value['author'] . '<br>';
+                $this->db->query('delete from authors where id=' . $value['id']);
+            }
+        }
+    }
+
+    private function cleantags() {
+        $list = $this->tag_model->show_tags();
+        foreach ($list as $value) {
+            $tag_id = $this->tag_model->search_tag_by_id($value['id']);
+            if ($tag_id == 0) {
+                echo $value['tag'] . '<br>';
+                $this->db->query('delete from tags where id=' . $value['id']);
+            }
+        }
+    }
+
+    private function inserttags($id) {
+        $tags = $this->input->post('tags');
+        $tags = explode(',', $tags);
+        $this->db->query('delete from book_tag where book_id=' . $id);
+        foreach ($tags as $tag) {
+            $tag = ucfirst(trim($tag));
+            if ($tag != '') {
+                $tag_id = $this->tag_model->search_tag($tag);
+                if ($tag_id == 0) {
+                    $tag_id = $this->tag_model->insert_tag($tag);
+                }
+                $this->book_model->insert_book_tag($id, $tag_id);
+            }
+        }
+    }
+
+    private function insertauthors($id) {
+        $authors = $this->input->post('authors');
+        $authors = explode(',', $authors);
+        $this->db->query('delete from book_author where book_id=' . $id);
+        foreach ($authors as $author) {
+            $author = ucfirst(trim($author));
+            if ($author != '') {
+                $author_id = $this->author_model->search_author($author);
+                if ($author_id == 0) {
+                    $author_id = $this->author_model->insert_author($author);
+                }
+                $this->book_model->insert_book_author($id, $author_id);
+            }
         }
     }
 

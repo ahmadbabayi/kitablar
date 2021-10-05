@@ -26,6 +26,16 @@ class Author_model extends CI_Model {
         }
     }
     
+    public function search_author_by_id($id) {
+        $query = $this->db->query('SELECT book_id FROM book_author WHERE author_id = "'.$id.'"');
+        $row = $query->row();
+        if ($query->num_rows()>0) {
+            return $row->book_id;
+        } else {
+            return 0;
+        }
+    }
+    
     public function insert_author($author) {
         $this->author = $author;
         $this->db->insert('authors', $this);

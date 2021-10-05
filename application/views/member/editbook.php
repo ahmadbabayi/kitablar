@@ -51,6 +51,10 @@
         <textarea class="w3-input w3-border" name="description"><?php echo $row['description']; ?></textarea>
     </div>
     <div class="w3-section">
+        <label>Keywords</label>
+        <input class="w3-input w3-border" type="text" name="keywords" value="<?php echo $row['keywords']; ?>">
+    </div>
+    <div class="w3-section">
         <label>Tags</label>
         <input class="w3-input w3-border" type="text" name="tags" value="<?php
                 unset($links);

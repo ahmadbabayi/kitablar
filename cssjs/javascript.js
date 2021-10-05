@@ -43,3 +43,18 @@ function selecttext(tagid) {
         wow.select();
         document.execCommand('copy');
 }
+
+function genkeywords(){
+    var wow = document.getElementById("title");
+    var title = wow.value;
+    title = title.replace(/[ ]/g, ", ");
+    var wow1 = document.getElementById("authors");
+    var wow2 = document.getElementById("translator");
+    var wow3 = document.getElementById("tags");
+    var wowz = document.getElementById("keywords");
+    var str = title + ", " + wow1.value + ", " + wow2.value + ", " + wow3.value;
+    str = str.replace(", ,", ",");
+    str = str.replace(", ,", ",");
+    wowz.value = str;
+    
+}

@@ -22,35 +22,35 @@
     </div>
     <div class="w3-section">
         <label>Cover image</label>
-        <input class="w3-input w3-border" type="file" name="cover" required>
+        <input class="w3-input w3-border" type="file" name="cover">
     </div>
     <div class="w3-section">
         <label>Title</label>
-        <input class="w3-input w3-border" type="text" name="title" required>
+        <input class="w3-input w3-border" type="text" name="title" id="title" required>
     </div>
     <div class="w3-section">
         <label>Author</label>
-        <input class="w3-input w3-border" type="text" name="author" required>
+        <input class="w3-input w3-border" type="text" name="authors" id="authors">
     </div>
     <div class="w3-section">
         <label>Translator</label>
-        <input class="w3-input w3-border" type="text" name="translator" required>
+        <input class="w3-input w3-border" type="text" name="translator" id="translator">
     </div>
     <div class="w3-section">
         <label>ISBN</label>
-        <input class="w3-input w3-border" type="text" name="isbn" required>
-    </div>
-    <div class="w3-section">
-        <label>Tags</label>
-        <input class="w3-input w3-border" type="text" name="tags" required>
+        <input class="w3-input w3-border" type="text" name="isbn">
     </div>
     <div class="w3-section">
         <label>Description</label>
-        <textarea class="w3-input w3-border" name="description" required=""></textarea>
+        <textarea class="w3-input w3-border" name="description"></textarea>
     </div>
     <div class="w3-section">
         <label>Tags</label>
-        <input class="w3-input w3-border" type="text" name="tags" required>
+        <input class="w3-input w3-border" type="text" name="tags" id="tags">
+    </div>
+    <div class="w3-section">
+        <label>Keywords</label>
+        <input class="w3-input w3-border" type="text" name="keywords" id="keywords" onclick="genkeywords(event)" onfocus="genkeywords(event)">
     </div>
     <button type="submit" class="w3-button w3-block w3-padding-large w3-green w3-margin-bottom">Submit</button>
 </form>  

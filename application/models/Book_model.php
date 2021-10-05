@@ -217,6 +217,7 @@ class Book_model extends CI_Model {
         $this->translator = ucfirst(arab2farsi($this->input->post('translator')));
         $this->isbn = $this->input->post('isbn');
         $this->description = arab2farsi($this->input->post('description'));
+        $this->keywords = arab2farsi(rtrim($this->input->post('keywords'), ', '));
         $this->user_id = $this->session->userdata('user_id');
         $this->date = time();
 
@@ -227,6 +228,7 @@ class Book_model extends CI_Model {
         unset($this->translator);
         unset($this->isbn);
         unset($this->description);
+        unset($this->keywords);
         unset($this->user_id);
         unset($this->date);
     }
@@ -267,6 +269,7 @@ class Book_model extends CI_Model {
         $this->translator = $this->input->post('translator');
         $this->isbn = $this->input->post('isbn');
         $this->description = $this->input->post('description');
+        $this->keywords = $this->input->post('keywords');
         $this->date = time();
         $id = $this->input->post('id');
 
@@ -277,6 +280,7 @@ class Book_model extends CI_Model {
         unset($this->translator);
         unset($this->isbn);
         unset($this->description);
+        unset($this->keywords);
         unset($this->date);
     }
     

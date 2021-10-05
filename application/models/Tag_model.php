@@ -26,6 +26,16 @@ class Tag_model extends CI_Model {
         }
     }
     
+    public function search_tag_by_id($id) {
+        $query = $this->db->query('SELECT book_id FROM book_tag WHERE tag_id = "'.$id.'"');
+        $row = $query->row();
+        if ($query->num_rows()>0) {
+            return $row->book_id;
+        } else {
+            return 0;
+        }
+    }
+    
     public function insert_tag($tag) {
         $this->tag = $tag;
         $this->db->insert('tags', $this);
