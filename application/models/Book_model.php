@@ -190,7 +190,6 @@ class Book_model extends CI_Model {
 
     public function show_category_books($ids) {
         $this->db->where_in('id', $ids);
-        $this->db->where('active', 1);
         $this->db->order_by('id', 'DESC');
         $query = $this->db->get('books');
         return $query->result_array();
