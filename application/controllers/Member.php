@@ -181,7 +181,7 @@ class Member extends CI_Controller {
                         }
                     }
 
-                    redirect('book/details/' . $id, 'location');
+                    redirect('book/details/'.$id.'/'.$id, 'location');
                 }
             } else {
                 show_404();

@@ -12,7 +12,7 @@
             <item>
                 <title><?php echo $row['title'];  ?></title>
                 <description><?php echo $row['description'];  ?></description>
-                <link>http://www.kitablar.com/book/details/<?php echo $row['id'] ?></link>
+                <link>https://kitablar.com/book/details/<?php echo $row['title'].'/'.$row['id'] ?></link>
                 <pubDate><?php echo standard_date('DATE_W3C', $row['date']); ?></pubDate>
             </item>
         <?php endforeach; ?>

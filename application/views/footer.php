@@ -1,6 +1,6 @@
 <footer id="myFooter">
             <div class="w3-container w3-center">
-                <p>Powered by <a href="http://www.kitablar.com/" target="_blank">Kitablar.com</a></p>
+                <p>Powered by <a href="https://kitablar.com/" target="_blank">Kitablar.com</a></p>
                 <a href="<?php echo base_url('rss'); ?>" ><img alt="rss" src="<?php echo base_url('images/rss.gif'); ?>"></a>
             </div>
         </footer>

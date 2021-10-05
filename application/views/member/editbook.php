@@ -1,6 +1,6 @@
 <div class="w3-container" id="contact" style="margin-top:75px">
     <ul>
-            <?php echo anchor('book/details/' . $row['id'], '<li class="w3-button">back</li>'); ?>
+            <?php echo anchor('book/details/'.$row['title'].'/'.$row['id'], '<li class="w3-button">back</li>'); ?>
         </ul>
     <h1 class="w3-xxxlarge w3-text-green"><b>Edit book</b></h1>
     <hr style="width:50px;border:5px solid green" class="w3-round">

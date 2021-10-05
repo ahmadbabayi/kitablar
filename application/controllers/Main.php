@@ -17,4 +17,18 @@ class Main extends CI_Controller {
         $this->load->view('main', $data);
         $this->load->view('footer');
     }
+    
+    public function sitemap() {
+        $this->load->helper('str_helper');
+        $this->load->model('author_model');
+        $this->load->model('book_model');
+        $this->load->model('tag_model');
+        $data['authors'] = $this->author_model->show_authors();
+        $data['formatlist'] = $this->book_model->show_formats();
+        $data['taglist'] = $this->tag_model->show_tags();
+        $data['booklist'] = $this->book_model->show_books();
+        
+        $string = $this->load->view('sitemap', $data, TRUE);
+        $this->output->set_content_type('application/xml')->set_output($string);        
+    }
 }

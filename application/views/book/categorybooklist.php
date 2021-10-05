@@ -22,7 +22,7 @@
             }
             ?>
             <a style="float: left; width: 200px; height: 300px;" class="w3-bar-item w3-card w3-button" href="<?php
-               $link2 = site_url() . '/book/details/' . $row['id'];
+               $link2 = site_url() . '/book/details/'.$row['title'].'/'.$row['id'];
                echo $link2;
                ?>">
                 <img src="<?php echo base_url($link); ?>"><br>

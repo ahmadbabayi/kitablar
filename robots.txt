@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: /captcha
+Sitemap: https://kitablar.com/main/sitemap

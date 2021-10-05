@@ -150,7 +150,7 @@ class Book extends CI_Controller {
     }
 
     public function details() {
-        $id = intval($this->uri->segment(3, 0));
+        $id = intval($this->uri->segment(4, 0));
         if ($id == 0) {
             redirect('book', 'location');
         }
@@ -222,7 +222,7 @@ class Book extends CI_Controller {
             redirect('book', 'location');
         }
         if (!$this->session->has_userdata('downloadtoken')) {
-            redirect('book/details/' . $item['book_id'], 'location');
+            redirect('book/details/'.$item['book_id'].'/'.$item['book_id'], 'location');
         }
         $this->load->helper('download');
 
