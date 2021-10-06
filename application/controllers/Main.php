@@ -5,6 +5,7 @@ class Main extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('main_model');
+        $this->load->helper('str_helper');
     }
 
     public function index() {
@@ -19,7 +20,6 @@ class Main extends CI_Controller {
     }
     
     public function sitemap() {
-        $this->load->helper('str_helper');
         $this->load->model('author_model');
         $this->load->model('book_model');
         $this->load->model('tag_model');

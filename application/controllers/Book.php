@@ -6,6 +6,7 @@ class Book extends CI_Controller {
         parent::__construct();
         $this->load->model('book_model');
         $this->load->library('pagination');
+        $this->load->helper('str_helper');
 
         //pagination
         $config['base_url'] = site_url() . '/book/page/';
@@ -155,7 +156,7 @@ class Book extends CI_Controller {
             redirect('book', 'location');
         }
         $this->load->model('tag_model');
-        $this->load->helper(array('file','str_helper','download','number','date'));
+        $this->load->helper(array('file','download','number','date'));
         $this->lang->load('dil', 'english');
         $ip = $this->input->ip_address();
         $this->session->set_userdata('downloadtoken', $ip);

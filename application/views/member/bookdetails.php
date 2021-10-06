@@ -1,6 +1,6 @@
 <div class="w3-container w3-padding-64">
     <div>
-        <?php echo anchor('book/details/'.$row['title'].'/'.$row['id'], 'back', 'class="w3-button"'); ?>
+        <?php echo anchor('book/details/'.remove_bracket($row['title']).'/'.$row['id'], 'back', 'class="w3-button"'); ?>
     </div>
     <div>
         <?php

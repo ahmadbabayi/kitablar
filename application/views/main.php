@@ -28,7 +28,7 @@
                 ?>
                 <div class="w3-button w3-bar-item w3-block" style="width: 180px;">
                     <a style="text-decoration: none;" href="<?php
-                    $link2 = site_url() . 'book/details/'.$row['title'].'/'.$row['id'];
+                    $link2 = site_url() . 'book/details/'.remove_bracket($row['title']).'/'.$row['id'];
                     echo $link2;
                     ?>">
                         <img class="w3-border" src="<?php echo base_url($link); ?>" alt="<?php echo $row['title']; ?>">
@@ -54,7 +54,7 @@
                 ?>
                 <div class="w3-button w3-bar-item w3-block" style="width: 180px;">
                     <a style="text-decoration: none;" href="<?php
-                    $link2 = site_url() . 'book/details/'.$row['title'].'/'.$row['id'];
+                    $link2 = site_url() . 'book/details/'.remove_bracket($row['title']).'/'.$row['id'];
                     echo $link2;
                     ?>">
                         <img class="w3-border" src="<?php echo base_url($link); ?>" alt="<?php echo $row['title']; ?>">        
