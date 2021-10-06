@@ -231,6 +231,30 @@ class Book_model extends CI_Model {
         unset($this->user_id);
         unset($this->date);
     }
+    
+    public function insert_book2($lang, $title, $description, $keywords) {
+        $this->language = $lang;
+        $this->title = ucfirst(arab2farsi($title));
+        $this->translator = '';
+        $this->isbn = '';
+        $this->active = 1;
+        $this->description = strip_tags(arab2farsi($description));
+        $this->keywords = arab2farsi($keywords);
+        $this->user_id = $this->session->userdata('user_id');
+        $this->date = time();
+
+        $this->db->insert('books', $this);
+        
+        unset($this->language);
+        unset($this->title);
+        unset($this->translator);
+        unset($this->isbn);
+        unset($this->active);
+        unset($this->description);
+        unset($this->keywords);
+        unset($this->user_id);
+        unset($this->date);
+    }
 
     public function insert_book_file($id, $filename,$format) {
         $this->book_id = $id;
@@ -239,6 +263,11 @@ class Book_model extends CI_Model {
         $this->date = time();
 
         $this->db->insert('book_files', $this);
+        
+        unset($this->book_id);
+        unset($this->file_name);
+        unset($this->format);
+        unset($this->date);
     }
     
     public function insert_book_author($id,$author_id) {

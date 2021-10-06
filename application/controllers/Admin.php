@@ -59,7 +59,7 @@ class Admin extends CI_Controller {
                 $sql = file_get_contents("./data/backup.sql");
                 $sqls = explode(';', $sql);
                 array_pop($sqls);
-
+                $this->db->query("SET foreign_key_checks = 0;");
                 foreach ($sqls as $statement) {
                     $statment = $statement . ";";
                     $this->db->query($statement);

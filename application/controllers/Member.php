@@ -21,6 +21,103 @@ class Member extends CI_Controller {
         $this->load->view('footer');
     }
 
+    public function importbooks() {
+        $dir = 'data/import';
+        $dirlist = scan_Dir($dir);
+        foreach ($dirlist as $value) {
+            if (pathinfo($value, PATHINFO_EXTENSION) == 'opf') {
+                echo '-------------------------------------<br>';
+                $path_parts = pathinfo($value);
+                $path = $path_parts['dirname'];
+                $file = $path_parts['basename'];
+                $filename = $path_parts['filename'];
+                
+                //define variables
+                $description = '';
+                $keywords = '';
+                $lang = 0;
+                
+                $feed = file_get_contents('../' . $value) or die("Error: Cannot create object");
+                $sxe = new SimpleXMLElement($feed);
+                $sxe->registerXPathNamespace('c', 'http://purl.org/dc/elements/1.1/');
+                $titles = $sxe->xpath('//c:title');
+                $authors = $sxe->xpath('//c:creator');
+                $des = $sxe->xpath('//c:description');
+                $tags = $sxe->xpath('//c:subject');
+                $language = $sxe->xpath('//c:language');
+
+                foreach ($titles as $val) {
+                    $title = $val;
+                }
+                
+                $keywords = $title;
+                
+                foreach ($authors as $val) {
+                    $author = $val;
+                    $keywords = $keywords.' '.$val;
+                }
+                $authors = explode(',', $author);
+                
+                foreach ($tags as $val) {
+                    $keywords = $keywords.' '.$val;
+                }
+
+                foreach ($des as $val) {
+                    $description = $val;
+                }
+
+                foreach ($language as $val) {
+                    if ($val == 'fas') {
+                        $lang = 3;
+                    }
+                    if ($val == 'aze') {
+                        $lang = 2;
+                    }
+                    if ($val == 'azb') {
+                        $lang = 1;
+                    }
+                }
+                $keywords = str_replace(',', ' ', $keywords);
+                $keywords = str_replace('  ', ' ', $keywords);
+                $keywords = str_replace(' ', ', ', $keywords);
+                $this->book_model->insert_book2($lang, $title, $description, $keywords);
+                $id = $this->db->insert_id();
+                $dir = '../data/books/bk' . $id . '/';
+                mkdir($dir);
+                $f = '../' . $value;
+                $cover = str_replace('.opf', '.jpg', $f);
+                $pdf = str_replace('.opf', '.pdf', $f);
+                $epub = str_replace('.opf', '.epub', $f);
+                if (file_exists($cover)) {
+                    //creat thumbnail of cover
+                    $image1_path = $dir . 'cover.jpg';
+                    copy($cover, $image1_path);
+                    branding($image1_path);
+                    $image2_path = $dir . 'coverthumb.jpg';
+                    create_thumb($image1_path, $image2_path, $box = 160);
+                }
+
+                if (file_exists($pdf)) {
+                    $pdffile = 'f' . $id . '.pdf';
+                    copy($pdf, $dir . $pdffile);
+                    $this->book_model->insert_book_file($id, $pdffile, 'pdf');
+                }
+                
+                if (file_exists($epub)) {
+                    $epubfile = 'f' . $id . '.epub';
+                    copy($epub, $dir . $epubfile);
+                    $this->book_model->insert_book_file($id, $epubfile, 'epub');
+                }
+
+                //search & insert book authors
+                $this->insertauthors2($id, $authors);
+                //search & insert book tags
+                $this->inserttags2($id, $tags);
+                
+            }
+        }
+    }
+
     public function addbook() {
         $data['description'] = '';
         $data['keywords'] = '';
@@ -253,7 +350,7 @@ class Member extends CI_Controller {
             redirect('member/', 'location');
         }
     }
-    
+
     //--------------------------------------------------------------------------------------
     //private functions
     private function cleanauthors() {
@@ -294,9 +391,37 @@ class Member extends CI_Controller {
         }
     }
 
+    private function inserttags2($id, $tags) {
+        $this->db->query('delete from book_tag where book_id=' . $id);
+        foreach ($tags as $tag) {
+            $tag = ucfirst(trim($tag));
+            if ($tag != '') {
+                $tag_id = $this->tag_model->search_tag($tag);
+                if ($tag_id == 0) {
+                    $tag_id = $this->tag_model->insert_tag($tag);
+                }
+                $this->book_model->insert_book_tag($id, $tag_id);
+            }
+        }
+    }
+
     private function insertauthors($id) {
         $authors = $this->input->post('authors');
         $authors = explode(',', $authors);
+        $this->db->query('delete from book_author where book_id=' . $id);
+        foreach ($authors as $author) {
+            $author = ucfirst(trim($author));
+            if ($author != '') {
+                $author_id = $this->author_model->search_author($author);
+                if ($author_id == 0) {
+                    $author_id = $this->author_model->insert_author($author);
+                }
+                $this->book_model->insert_book_author($id, $author_id);
+            }
+        }
+    }
+
+    private function insertauthors2($id, $authors) {
         $this->db->query('delete from book_author where book_id=' . $id);
         foreach ($authors as $author) {
             $author = ucfirst(trim($author));

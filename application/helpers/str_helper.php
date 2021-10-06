@@ -37,3 +37,27 @@ function getuid($string) {
     $hash = md5($string);
     return substr($hash, 0, 8) . '-' . substr($hash, 8, 4) . '-' . substr($hash, 12, 4) . '-' . substr($hash, 16, 4) . '-' . substr($hash, 20, 12);
 }
+
+function scan_Dir($dir) {
+    $arrfiles = array();
+    if (is_dir($dir)) {
+        if ($handle = opendir($dir)) {
+            chdir($dir);
+            while (false !== ($file = readdir($handle))) {
+                if ($file != "." && $file != "..") {
+                    if (is_dir($file)) {
+                        $arr = scan_Dir($file);
+                        foreach ($arr as $value) {
+                            $arrfiles[] = $dir."/".$value;
+                        }
+                    } else {
+                        $arrfiles[] = $dir."/".$file;
+                    }
+                }
+            }
+            chdir("../");
+        }
+        closedir($handle);
+    }
+    return $arrfiles;
+}
