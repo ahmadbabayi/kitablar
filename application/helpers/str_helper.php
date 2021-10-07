@@ -5,9 +5,8 @@ if (!defined('BASEPATH'))
 
 function arab2farsi($str) {
     $str = str_replace('ي', 'ی', $str);
+    $str = str_replace('ي', 'ی', $str);
     $str = str_replace('ك', 'ک', $str);
-    $str = str_replace('دوکتور ', '', $str);
-
     return $str;
 }
 
@@ -28,6 +27,9 @@ function get_num_of_words($string) {
 
 function remove_bracket($str) {
     $str = str_replace(',', ' ', $str);
+    $str = str_replace('  ', ' ', $str);
+    //$str = str_replace(' ', '_', $str);
+    //$str = str_replace(':', '_', $str);
     $str = str_replace('(', '', $str);
     $str = str_replace(')', '', $str);
     $str = str_replace('&', ' - ', $str);
@@ -49,10 +51,10 @@ function scan_Dir($dir) {
                     if (is_dir($file)) {
                         $arr = scan_Dir($file);
                         foreach ($arr as $value) {
-                            $arrfiles[] = $dir."/".$value;
+                            $arrfiles[] = $dir . "/" . $value;
                         }
                     } else {
-                        $arrfiles[] = $dir."/".$file;
+                        $arrfiles[] = $dir . "/" . $file;
                     }
                 }
             }

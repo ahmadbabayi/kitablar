@@ -12,9 +12,9 @@
         <h3>Admin Menu</h3>
         <ul class="w3-ul">
             <li><?php echo anchor('admin', 'All E-book list') ?></li>
+            <li><?php echo anchor('admin/importbooks', 'Import E-book'); ?></li>
             <li><?php echo anchor('admin/verifybook', 'Verify book') ?></li>
             <li><?php echo anchor('admin/userlist', 'User list') ?></li>
-            <li><?php echo anchor('admin/categorylist', 'Categories') ?></li>
             <li><?php echo anchor('admin/contacts', 'Contacts') ?></li>
             <li><?php echo anchor('admin/backup', 'Backup'); ?></li>
             <li><?php echo anchor('admin/restore', 'Restore'); ?></li>

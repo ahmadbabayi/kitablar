@@ -4,8 +4,8 @@ class Admin extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('admin_model');
-        $this->load->helper('file');
+        $this->load->model(array('admin_model','book_model', 'user_model', 'author_model', 'tag_model'));
+        $this->load->helper(array('str_helper', 'file', 'thumb_helper', 'number'));
         if (!(isset($_SESSION['username']) && $_SESSION['logged_in'] === true)) {
             redirect('user/login', 'location');
         }
@@ -23,6 +23,103 @@ class Admin extends CI_Controller {
         $this->load->view('admin/main');
         $this->load->view('admin/booklist', $data);
         $this->load->view('footer');
+    }
+    
+    public function importbooks() {
+        $dir = 'data/import';
+        $dirlist = scan_Dir($dir);
+        foreach ($dirlist as $value) {
+            if (pathinfo($value, PATHINFO_EXTENSION) == 'opf') {
+                echo '-------------------------------------<br>';
+                $path_parts = pathinfo($value);
+                $path = $path_parts['dirname'];
+                $file = $path_parts['basename'];
+                $filename = $path_parts['filename'];
+                
+                //define variables
+                $description = '';
+                $keywords = '';
+                $lang = 0;
+                
+                $feed = file_get_contents('../' . $value) or die("Error: Cannot create object");
+                $sxe = new SimpleXMLElement($feed);
+                $sxe->registerXPathNamespace('c', 'http://purl.org/dc/elements/1.1/');
+                $titles = $sxe->xpath('//c:title');
+                $authors = $sxe->xpath('//c:creator');
+                $des = $sxe->xpath('//c:description');
+                $tags = $sxe->xpath('//c:subject');
+                $language = $sxe->xpath('//c:language');
+
+                foreach ($titles as $val) {
+                    $title = $val;
+                }
+                
+                $keywords = $title;
+                
+                foreach ($authors as $val) {
+                    $author = $val;
+                    $keywords = $keywords.' '.$val;
+                }
+                $authors = explode(',', $author);
+                
+                foreach ($tags as $val) {
+                    $keywords = $keywords.' '.$val;
+                }
+
+                foreach ($des as $val) {
+                    $description = $val;
+                }
+
+                foreach ($language as $val) {
+                    if ($val == 'fas') {
+                        $lang = 3;
+                    }
+                    if ($val == 'aze') {
+                        $lang = 2;
+                    }
+                    if ($val == 'azb') {
+                        $lang = 1;
+                    }
+                }
+                $keywords = str_replace(',', ' ', $keywords);
+                $keywords = str_replace('  ', ' ', $keywords);
+                $keywords = str_replace(' ', ', ', $keywords);
+                $this->book_model->insert_book2($lang, $title, $description, $keywords);
+                $id = $this->db->insert_id();
+                $dir = '../data/books/bk' . $id . '/';
+                mkdir($dir);
+                $f = '../' . $value;
+                $cover = str_replace('.opf', '.jpg', $f);
+                $pdf = str_replace('.opf', '.pdf', $f);
+                $epub = str_replace('.opf', '.epub', $f);
+                if (file_exists($cover)) {
+                    //creat thumbnail of cover
+                    $image1_path = $dir . 'cover.jpg';
+                    copy($cover, $image1_path);
+                    branding($image1_path);
+                    $image2_path = $dir . 'coverthumb.jpg';
+                    create_thumb($image1_path, $image2_path, $box = 160);
+                }
+
+                if (file_exists($pdf)) {
+                    $pdffile = 'f' . $id . '.pdf';
+                    copy($pdf, $dir . $pdffile);
+                    $this->book_model->insert_book_file($id, $pdffile, 'pdf');
+                }
+                
+                if (file_exists($epub)) {
+                    $epubfile = 'f' . $id . '.epub';
+                    copy($epub, $dir . $epubfile);
+                    $this->book_model->insert_book_file($id, $epubfile, 'epub');
+                }
+
+                //search & insert book authors
+                $this->insertauthors2($id, $authors);
+                //search & insert book tags
+                $this->inserttags2($id, $tags);
+                
+            }
+        }
     }
 
     public function backup() {
@@ -312,82 +409,6 @@ class Admin extends CI_Controller {
         redirect('admin/userlist/', 'location');
     }
 
-    public function categorylist() {
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'admin area';
-        $data['booklist'] = $this->admin_model->get_tags();
-        $this->load->view('header', $data);
-        $this->load->view('admin/main');
-        $this->load->view('admin/categorylist', $data);
-        $this->load->view('footer');
-    }
-
-    public function categoryadd() {
-        $this->load->helper(array('form', 'url'));
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('title', 'category name', 'required');
-        $this->form_validation->set_rules('lang', 'Language', 'is_natural_no_zero');
-        if ($this->form_validation->run() == FALSE) {
-            $data['description'] = '';
-            $data['keywords'] = '';
-            $data['title'] = 'admin area';
-            $this->load->view('header', $data);
-            $this->load->view('admin/main');
-            $this->load->view('admin/categoryadd');
-            $this->load->view('footer');
-        } else {
-            $this->admin_model->insert_category();
-            redirect('admin/categorylist/', 'location');
-        }
-    }
-
-    public function categorydetails($id) {
-        $data['description'] = '';
-        $data['keywords'] = '';
-        $data['title'] = 'admin area';
-        $data['row'] = $this->admin_model->show_categories($id);
-        $this->load->view('header', $data);
-        $this->load->view('admin/main');
-        $this->load->view('admin/categorydetails', $data);
-        $this->load->view('footer');
-    }
-
-    public function categoryremove($id) {
-        $id = intval($id);
-        if ($id > 0) {
-            $this->db->query('delete from categories where id=' . $id);
-        }
-        redirect('admin/categorylist/', 'location');
-    }
-
-    public function categoryedit() {
-        if ($this->uri->segment(3, 0) == '') {
-            $id = intval($this->input->post('id'));
-        } else {
-            $id = $this->uri->segment(3, 0);
-        }
-        $data['row'] = $this->admin_model->show_categories($id);
-        $this->load->helper(array('form', 'url'));
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('title', 'category name', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            $data['description'] = '';
-            $data['keywords'] = '';
-            $data['title'] = 'admin area';
-            $this->load->view('header', $data);
-            $this->load->view('admin/main');
-            $this->load->view('admin/categoryedit', $data);
-            $this->load->view('footer');
-        } else {
-            $this->admin_model->category_update();
-            redirect('admin/categorydetails/' . $id, 'location');
-        }
-    }
-
     public function contacts() {
         $this->load->helper('date');
         $data['description'] = '';
@@ -406,6 +427,35 @@ class Admin extends CI_Controller {
             $this->db->query('delete from contact where id=' . $id);
         }
         redirect('admin/contacts/', 'location');
+    }
+    
+    //----------------------------------------------------------------------
+    private function inserttags2($id, $tags) {
+        $this->db->query('delete from book_tag where book_id=' . $id);
+        foreach ($tags as $tag) {
+            $tag = ucfirst(trim($tag));
+            if ($tag != '') {
+                $tag_id = $this->tag_model->search_tag($tag);
+                if ($tag_id == 0) {
+                    $tag_id = $this->tag_model->insert_tag($tag);
+                }
+                $this->book_model->insert_book_tag($id, $tag_id);
+            }
+        }
+    }
+
+    private function insertauthors2($id, $authors) {
+        $this->db->query('delete from book_author where book_id=' . $id);
+        foreach ($authors as $author) {
+            $author = ucfirst(trim($author));
+            if ($author != '') {
+                $author_id = $this->author_model->search_author($author);
+                if ($author_id == 0) {
+                    $author_id = $this->author_model->insert_author($author);
+                }
+                $this->book_model->insert_book_author($id, $author_id);
+            }
+        }
     }
 
 }

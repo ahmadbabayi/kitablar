@@ -105,37 +105,6 @@ class Admin_model extends CI_Model {
         $this->db->update('users', $this, array('id' => $id));
     }
 
-    public function get_tags() {
-        $query = $this->db->get('tags');
-        return $query->result_array();
-    }
-
-    public function insert_category() {
-        $this->title = $this->input->post('title');
-        $this->description = $this->input->post('description');
-        $this->language_id = $this->input->post('lang');
-
-        $this->db->insert('categories', $this);
-    }
-
-    public function show_categories($id) {
-
-        $query = $this->db->get_where('categories', array('id' => $id));
-        return $query->row_array();
-    }
-
-    public function category_update() {
-        if ($this->input->post('lang') == 0) {
-            $this->language_id = $this->input->post('lang_code');
-        } else {
-            $this->language_id = $this->input->post('lang');
-        }
-        $this->title = $this->input->post('title');
-        $this->description = $this->input->post('description');
-        $id = $this->input->post('id');
-        $this->db->update('categories', $this, array('id' => $id));
-    }
-
     public function get_contacts() {
         $query = $this->db->get('contact');
         return $query->result_array();

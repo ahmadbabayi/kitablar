@@ -2,7 +2,6 @@
     <h3>Member area </h3>
     <ul class="w3-ul w3-border">
         <li><?php echo anchor('member/addbook', 'Add new E-book'); ?></li>
-        <li><?php echo anchor('member/importbooks', 'Import E-book'); ?></li>
         <li><?php echo anchor('member/booklist', 'My E-book'); ?></li>
         <li><?php echo anchor('member/profile', 'Profile'); ?></li>
         <?php

@@ -212,11 +212,11 @@ class Book_model extends CI_Model {
     
     public function insert_book() {
         $this->language = $this->input->post('book_lang');
-        $this->title = ucfirst(arab2farsi($this->input->post('title')));
-        $this->translator = ucfirst(arab2farsi($this->input->post('translator')));
+        $this->title = ucfirst(arab2farsi(trim($this->input->post('title'))));
+        $this->translator = ucfirst(arab2farsi(trim($this->input->post('translator'))));
         $this->isbn = $this->input->post('isbn');
         $this->description = arab2farsi($this->input->post('description'));
-        $this->keywords = arab2farsi(rtrim($this->input->post('keywords'), ', '));
+        $this->keywords = arab2farsi(rtrim(trim($this->input->post('keywords')), ','));
         $this->user_id = $this->session->userdata('user_id');
         $this->date = time();
 
@@ -293,11 +293,11 @@ class Book_model extends CI_Model {
             $this->language = $this->input->post('book_lang');
         }
 
-        $this->title = $this->input->post('title');
-        $this->translator = $this->input->post('translator');
+        $this->title = trim($this->input->post('title'));
+        $this->translator = trim($this->input->post('translator'));
         $this->isbn = $this->input->post('isbn');
         $this->description = $this->input->post('description');
-        $this->keywords = $this->input->post('keywords');
+        $this->keywords = trim($this->input->post('keywords'));
         $this->date = time();
         $id = $this->input->post('id');
 

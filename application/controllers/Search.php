@@ -6,7 +6,7 @@ class Search extends CI_Controller {
         parent::__construct();
         $this->load->model('book_model');
         $this->load->library('form_validation');
-
+        $this->load->helper('str_helper');
     }
 
     public function index() {

@@ -228,8 +228,9 @@ class Test extends CI_Controller {
     public function updatestr() {
         $filelist = $this->test_model->get_books();
         foreach ($filelist as $row) {
-            $str = arab2farsi($row['author']);
-            $this->db->query('UPDATE `books` SET `author`="' . $str . '" WHERE id=' . $row['id']);
+            $str = arab2farsi($row['title']);
+            echo $str.'<br>';
+            $this->db->query('UPDATE `books` SET `title`="' . $str . '" WHERE id=' . $row['id']);
         }
     }
 
