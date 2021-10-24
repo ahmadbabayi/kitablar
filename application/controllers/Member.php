@@ -336,4 +336,53 @@ class Member extends CI_Controller {
         }
     }
 
+    public function send2telegram() {
+        if ($this->uri->segment(3, 0) == '') {
+            $id = intval($this->input->post('id'));
+        } else {
+            $id = $this->uri->segment(3, 0);
+        }
+        if ($id > 0) {
+            $row = $this->book_model->show_book($id);
+            $message = $row['title'] . "\n";
+            $authors = $this->book_model->get_book_authors($id);
+            foreach ($authors as $author) {
+                $message .= $author['author'] . "\n";
+            }
+            $message .= $row['description'] . "\n";
+            $message .= "@kitablar";
+            if (!empty($row)) {
+                $link = 'data/books/bk' . $row['id'] . '/cover.jpg';
+                if (file_exists($link)) {
+                    $link = 'https://kitablar.com/data/books/bk' . $row['id'] . '/cover.jpg';
+
+                    $apiToken = "2066963836:AAFwELD388SZu2EfhyHad7nXwRzsaTkooqQ";
+
+                    $filerow = $this->book_model->show_files($id);
+                    
+                    foreach ($filerow as $item) {
+                        $ext = pathinfo($item['file_name'], PATHINFO_EXTENSION);
+                        $ext = strtoupper($ext);
+                        $filename = 'data/books/bk' . $row['id'] . '/' . $item['file_name'];
+                        if (file_exists($filename)) {
+                            if ($ext == 'PDF') {
+                                $data = ['chat_id' => '@kitablar', 'photo' => $link];
+                                $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendPhoto?" . http_build_query($data));
+
+                                $document = 'https://kitablar.com/' . $filename;
+                                $data = ['chat_id' => '@kitablar', 'document' => $document];
+                                $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendDocument?" . http_build_query($data));
+
+                                $data = ['chat_id' => '@kitablar', 'text' => $message];
+                                $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data));
+                            }
+                        }
+                    }
+                }
+            }
+            $data['id'] = $id + 1;
+            $this->load->view('test', $data);
+        }
+    }
+
 }

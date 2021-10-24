@@ -6,6 +6,7 @@ class Format extends CI_Controller {
         parent::__construct();
         $this->load->model('book_model');
         $this->load->library('pagination');
+        $this->load->helper('str_helper');
 
         //pagination
         $config['base_url'] = site_url() . '/book/page/';

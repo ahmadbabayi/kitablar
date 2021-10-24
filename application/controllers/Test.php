@@ -10,9 +10,9 @@ class Test extends CI_Controller {
 
     public function index() {
         $data['description'] = '';
-        $data['keywords'] = '';
+        $data['id'] = '';
         $data['title'] = 'admin area';
-        $this->load->view('template3', $data);
+        $this->load->view('test', $data);
     }
 
     public function exportzip() {

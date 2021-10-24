@@ -3,17 +3,51 @@
     <h2>Kitablar is a library of free eBook in Azerbaijani, Persian, Turkish and English languages.</h2>
 </div>
 
-<div class="w3-row">
-    <div class="w3-container w3-center">
-        <h2 class="w3-text-teal">Kitablar OPDS catalog</h2>
-        <!-- The text field -->
-        <input type="text" value="https://kitablar.com/opds" readonly="" size="30" onclick="select()">
-        <p>You can add link into OPDS Browser applications like <a href="https://www.demarque.com/en-aldiko" target="_blank">Aldiko</a>, <a href="https://fbreader.org/" target="_blank">FBReader</a> and ...</p>
-        <h3>What is OPDS?</h3>
-        <p>The Open Publication Distribution System (OPDS) Catalog format is a syndication format for electronic publications based on Atom and HTTP. OPDS Catalogs enable the aggregation, distribution, discovery, and acquisition of electronic publications. OPDS Catalogs use existing or emergent open standards and conventions, with a priority on simplicity.</p>
+<div class="w3-container w3-display-container">
+    <img class="mySlides" src="images/slide_opds.jpg" style="width:100%">
+    <img class="mySlides" src="images/slide_telegram.jpg" style="width:100%">
+    <img class="mySlides" src="images/slide_kitablar.jpg" style="width:100%">
+    <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%">
+        <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
+        <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
+        <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
+        <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
+        <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
     </div>
-
 </div>
+
+<script>
+    var slideIndex = 1;
+    showDivs(slideIndex);
+
+    function plusDivs(n) {
+        showDivs(slideIndex += n);
+    }
+
+    function currentDiv(n) {
+        showDivs(slideIndex = n);
+    }
+
+    function showDivs(n) {
+        var i;
+        var x = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("demo");
+        if (n > x.length) {
+            slideIndex = 1
+        }
+        if (n < 1) {
+            slideIndex = x.length
+        }
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" w3-white", "");
+        }
+        x[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " w3-white";
+    }
+</script>
 
 <div class="w3-row">
     <div class="w3-container w3-center">
@@ -28,7 +62,7 @@
                 ?>
                 <div class="w3-button w3-bar-item w3-block" style="width: 180px;">
                     <a style="text-decoration: none;" href="<?php
-                    $link2 = site_url() . 'book/details/'.remove_bracket($row['title']).'/'.$row['id'];
+                    $link2 = site_url() . 'book/details/' . remove_bracket($row['title']) . '/' . $row['id'];
                     echo $link2;
                     ?>">
                         <img class="w3-border" src="<?php echo base_url($link); ?>" alt="<?php echo $row['title']; ?>">
@@ -54,7 +88,7 @@
                 ?>
                 <div class="w3-button w3-bar-item w3-block" style="width: 180px;">
                     <a style="text-decoration: none;" href="<?php
-                    $link2 = site_url() . 'book/details/'.remove_bracket($row['title']).'/'.$row['id'];
+                    $link2 = site_url() . 'book/details/' . remove_bracket($row['title']) . '/' . $row['id'];
                     echo $link2;
                     ?>">
                         <img class="w3-border" src="<?php echo base_url($link); ?>" alt="<?php echo $row['title']; ?>">        

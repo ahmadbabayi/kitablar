@@ -23,14 +23,15 @@
     echo '        <title>' . remove_bracket($value['title']) . '</title>' . "\n";
     echo '        <updated>2021-09-27T18:12:32+02:00</updated>' . "\n";
     echo '        <id>urn:uuid:'. getuid('kitablar:book:'.$value['id']).'</id>' . "\n";
-    echo '        <content type="text/html">' . strip_tags(remove_bracket($value['description'])) . '</content>' . "\n";
     echo '        <link rel="http://opds-spec.org/image" href="' . base_url($link) . '" type="image/jpeg" />' . "\n";
     echo '        <link rel="http://opds-spec.org/image/thumbnail" href="' . base_url($link2) . '" type="image/jpeg" />' . "\n";
     echo '        <link rel="self" href="'.base_url('opds/book/' . $value['id']).'" type="application/atom+xml;type=entry;profile=opds-catalog"/>' . "\n";
+    $bookfiles = ' Format: ';
     foreach ($filerow as $item) {
         $ext = pathinfo($item['file_name'], PATHINFO_EXTENSION);
         $ext = strtoupper($ext);
         $filename = 'data/books/bk' . $value['id'] . '/' . $item['file_name'];
+        $bookfiles .= '(&lt;a href=&quot;'.base_url($filename) .'&quot;&gt;'.$ext.'&lt;/a&gt;)';
         echo '        <link rel="http://opds-spec.org/acquisition" href="'.base_url($filename) .'" type="'. mime_content_type($filename).'" title="'.$ext.'" />' . "\n";
     }
     if (!empty($authors)) {
@@ -47,6 +48,7 @@
         endforeach;
     }
     echo '        <dcterms:language>' . $this->lang->line('l' . $value['language']) . '</dcterms:language>' . "\n";
+    echo '        <content type="text/html">' . strip_tags(remove_bracket($value['description'])) .'&lt;br&gt;'.$bookfiles. '</content>' . "\n";
     echo '    </entry>' . "\n";
     ?>
 </feed>

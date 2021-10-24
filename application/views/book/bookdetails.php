@@ -4,6 +4,7 @@
         if (isset($_SESSION['username']) && $_SESSION['logged_in'] === true && $this->session->userdata('user_id') == $row['user_id']) {
             echo anchor('member/addbook', 'Add new E-book', 'class="w3-bar-item w3-button w3-mobile"');
             echo anchor('member/editbook/' . $row['id'], 'edit E-book details', 'class="w3-bar-item w3-button w3-mobile"');
+            echo anchor('member/send2telegram/' . $row['id'], 'Send to telegram', 'class="w3-bar-item w3-button w3-mobile"');
             echo anchor('member/bookdetails/' . $row['id'], 'book details and file uploads', 'class="w3-bar-item w3-button w3-mobile"');
             ?>
             <a href="<?php echo site_url() . '/member/removebook/' . $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this item?');" class="w3-bar-item w3-button w3-mobile">remove E-book</a>
