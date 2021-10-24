@@ -99,18 +99,17 @@ class Test extends CI_Controller {
     }
 
     public function bookmetadata() {
-        $filelist = $this->test_model->show_books2();
-        foreach ($filelist as $row) {
-            $filename = 'data/books/bk' . $row['book_id'] . '/' . $row['file_name'];
-            $extractpath = 'data/export/';
-            $format = 'doc';
-            if ($row['md5file'] != 0) {
-                if (pathinfo($filename, PATHINFO_EXTENSION) == $format) {
-                    echo $row['book_id'] . '--' . $row['title'] . '--' . $row['file_name'] . '--' . $row['md5file'];
-                    echo '<br><br>';
-                    //$this->test_model->insert_metadata($row,$format);
-                }
-            }
+        $this->load->helper('file');
+        $this->lang->load('dil', 'english');
+        $list = $this->book_model->show_books();
+        foreach ($list as $row) {
+            $data['authors'] = $this->book_model->get_book_authors($row['id']);
+            $data['tags'] = $this->book_model->get_book_tags($row['id']);
+            $data['row'] = $row;
+            $dir = 'data/books/bk' . $row['id'] . '/';
+            $opf = $dir.'f'. $row['id'] . '.opf';
+            $string = $this->load->view('book/opf', $data, TRUE);
+            write_file($opf, $string);
         }
     }
 

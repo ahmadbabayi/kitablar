@@ -381,7 +381,7 @@ class Member extends CI_Controller {
                 }
             }
             $data['id'] = $id + 1;
-            $this->load->view('test', $data);
+            $this->load->view('telegram', $data);
         }
     }
 
