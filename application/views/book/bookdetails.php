@@ -78,7 +78,7 @@
                     }
                     ?>
                 </td>
-                <td><?php echo anchor('book/download/' . $item['id'], 'Download', 'class="w3-button w3-hover-green w3-red"') ?></td>
+                <td><?php echo anchor('book/download/' . $item['id'], 'Download', 'class="w3-button w3-hover-green w3-red"');  echo ' '; if ($ext == 'EPUB'){echo anchor('book/epub/' . $row['id'], 'Read Online', 'class="w3-button w3-hover-green w3-red"');} ?></td>
             </tr>
         <?php endforeach; ?>
 

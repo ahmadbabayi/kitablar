@@ -180,6 +180,22 @@ class Book extends CI_Controller {
             show_404();
         }
     }
+    
+    public function epub() {
+        $id = intval($this->uri->segment(3, 0));
+        if ($id == 0) {
+            redirect('book', 'location');
+        }
+        $metadata = $this->book_model->show_book($id);
+        if (!empty($metadata)) {
+            $data['filerow'] = $this->book_model->show_files($id);
+            $data['title'] = $metadata['title'];
+            $data['id'] = $id;
+            $this->load->view('book/epub', $data);
+        } else {
+            show_404();
+        }
+    }
 
     public function library() {
         $id = intval($this->uri->segment(3, 0));

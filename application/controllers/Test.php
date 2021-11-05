@@ -12,7 +12,7 @@ class Test extends CI_Controller {
         $data['description'] = '';
         $data['id'] = '';
         $data['title'] = 'admin area';
-        $this->load->view('test', $data);
+        $this->load->view('book/epub', $data);
     }
 
     public function exportzip() {
