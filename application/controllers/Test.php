@@ -107,7 +107,7 @@ class Test extends CI_Controller {
             $data['tags'] = $this->book_model->get_book_tags($row['id']);
             $data['row'] = $row;
             $dir = 'data/books/bk' . $row['id'] . '/';
-            $opf = $dir.'f'. $row['id'] . '.opf';
+            $opf = $dir . 'f' . $row['id'] . '.opf';
             $string = $this->load->view('book/opf', $data, TRUE);
             write_file($opf, $string);
         }
@@ -192,7 +192,7 @@ class Test extends CI_Controller {
             $this->db->query('UPDATE `books` SET `keywords`="' . $str . '" WHERE id=' . $value['id']);
         }
     }
-    
+
     public function tagkeyword() {
         $array = $this->test_model->get_books();
         foreach ($array as $value) {
@@ -228,7 +228,7 @@ class Test extends CI_Controller {
         $filelist = $this->test_model->get_books();
         foreach ($filelist as $row) {
             $str = arab2farsi($row['title']);
-            echo $str.'<br>';
+            echo $str . '<br>';
             $this->db->query('UPDATE `books` SET `title`="' . $str . '" WHERE id=' . $row['id']);
         }
     }
@@ -286,7 +286,7 @@ class Test extends CI_Controller {
             }
         }
     }
-    
+
     public function cleankeywords() {
         $array = $this->test_model->get_books();
         foreach ($array as $value) {
@@ -300,6 +300,18 @@ class Test extends CI_Controller {
             echo $value['id'] . '---' . $str . '<br>';
             $this->db->query('UPDATE `books` SET `keywords`="' . $str . '" WHERE id=' . $value['id']);
         }
+    }
+
+    public function telegram() {
+        $apiToken = "2089431188:AAEIjil54XyOvbpzVb-fYv0qEwD0Cum3-Yg";
+        $filepath = realpath('data/books/bk1422/f1422.epub');
+        $post = array('chat_id' => '@gerdeh', 'document' => new CurlFile($filepath));
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot" .$apiToken . "/sendDocument");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_exec($ch);
+        curl_close($ch);
     }
 
 }

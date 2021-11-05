@@ -66,3 +66,11 @@ function scan_Dir($dir) {
     }
     return $arrfiles;
 }
+
+function makeCurlFile($file){
+$mime = mime_content_type($file);
+$info = pathinfo($file);
+$name = $info['basename'];
+$output = new CURLFile($file, $mime, $name);
+return $output;
+}

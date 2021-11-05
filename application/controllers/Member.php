@@ -357,31 +357,41 @@ class Member extends CI_Controller {
                     $link = 'https://kitablar.com/data/books/bk' . $row['id'] . '/cover.jpg';
 
                     $apiToken = "2066963836:AAFwELD388SZu2EfhyHad7nXwRzsaTkooqQ";
+                    $chat_id = '@kitablar';
 
                     $filerow = $this->book_model->show_files($id);
-                    
+
+                    $data = ['chat_id' => $chat_id, 'photo' => $link];
+                    $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendPhoto?" . http_build_query($data));
+
                     foreach ($filerow as $item) {
                         $ext = pathinfo($item['file_name'], PATHINFO_EXTENSION);
                         $ext = strtoupper($ext);
                         $filename = 'data/books/bk' . $row['id'] . '/' . $item['file_name'];
                         if (file_exists($filename)) {
                             if ($ext == 'PDF') {
-                                $data = ['chat_id' => '@kitablar', 'photo' => $link];
-                                $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendPhoto?" . http_build_query($data));
-
                                 $document = 'https://kitablar.com/' . $filename;
-                                $data = ['chat_id' => '@kitablar', 'document' => $document];
+                                $data = ['chat_id' => $chat_id, 'document' => $document];
                                 $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendDocument?" . http_build_query($data));
-
-                                $data = ['chat_id' => '@kitablar', 'text' => $message];
-                                $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data));
+                            }
+                            if ($ext == 'EPUB') {
+                                $filepath = realpath($filename);
+                                $post = array('chat_id' => $chat_id, 'document' => new CurlFile($filepath));
+                                $ch = curl_init();
+                                curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot" . $apiToken . "/sendDocument");
+                                curl_setopt($ch, CURLOPT_POST, 1);
+                                curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+                                curl_exec($ch);
+                                curl_close($ch);
                             }
                         }
                     }
+                    $data = ['chat_id' => $chat_id, 'text' => $message];
+                    $response = file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data));
                 }
             }
-            $data['id'] = $id + 1;
-            $this->load->view('telegram', $data);
+            //$data['id'] = $id + 1;
+            //$this->load->view('telegram', $data);
         }
     }
 
